@@ -1,0 +1,23 @@
+# IDEs and editors
+.idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+riderModule.iml
+/_ReSharper.Caches/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Build folders
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+
+# NuGet Packages
+packages/
+*.nupkg
