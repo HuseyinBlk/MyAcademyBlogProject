@@ -4,10 +4,25 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>52a86e8b-82d5-4ea2-9227-d086774e4528</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Blogy.Business\Blogy.Business.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Areas\Admin\Data\" />
+      <Folder Include="Areas\Admin\Models\" />
+      <Folder Include="Areas\Admin\Views\" />
     </ItemGroup>
 
 </Project>
