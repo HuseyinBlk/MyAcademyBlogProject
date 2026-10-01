@@ -1,0 +1,16 @@
+@model CreateCategoryDto
+
+@{
+    ViewBag.Title = "Yeni Kategori";
+    Layout = "_Layout";
+}
+
+<h2>Yen Kategori</h2>
+
+<form method="post">
+    <label>Kategori Adı</label>
+    <input type="text" class="form-control" asp-for="Name"/>
+    <span class="text-danger" asp-validation-for="Name"></span>
+    <br/>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

@@ -1,4 +1,5 @@
 using Blogy.Business.Mappings;
+using Blogy.Business.Services.BlogServices;
 using Blogy.Business.Services.CategoryServices;
 using Blogy.Business.Validators.CategoryValidators;
 using Blogy.DataAccess.Context;
@@ -10,6 +11,7 @@ using Blogy.DataAccess.Repositories.SocialRepositories;
 using Blogy.DataAccess.Repositories.TagRepositories;
 using Blogy.Entity.Entities;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +19,10 @@ var builder = WebApplication.CreateBuilder(args);
 //all automapper from one class
 builder.Services.AddAutoMapper(typeof(CategoryMappings).Assembly);
 //all Validators one class
-builder.Services.AddValidatorsFromAssembly(typeof(CreateCategoryValidator).Assembly);
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters()
+    .AddValidatorsFromAssembly(typeof(CreateCategoryValidator).Assembly);
 
 // Repositories DI
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
@@ -28,6 +33,7 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 //Services DI
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IBlogService, BlogService>();
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>

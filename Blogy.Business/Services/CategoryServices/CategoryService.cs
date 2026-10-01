@@ -37,6 +37,7 @@ public class CategoryService : ICategoryService
     public async Task UpdateAsync(UpdateCategoryDto categoryDto)
     {
         var category = await _categoryRepository.GetByIdAsync(categoryDto.Id);
+        _mapper.Map(categoryDto, category); 
         await _categoryRepository.UpdateAsync(category);
     }
 

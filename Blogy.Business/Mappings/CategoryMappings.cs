@@ -10,7 +10,7 @@ public class CategoryMappings : Profile
 {
     public CategoryMappings()
     {
-        CreateMap<Category, ResultCategoryDto>().ForMember(dst => dst.CategoryName, o => o.MapFrom(category => category.Name));
+        CreateMap<Category, ResultCategoryDto>().ForMember(dst => dst.Name, o => o.MapFrom(category => category.Name));
         CreateMap<Category, CreateCategoryDto>().ReverseMap();
         CreateMap<Category, UpdateCategoryDto>().ReverseMap();
     }
