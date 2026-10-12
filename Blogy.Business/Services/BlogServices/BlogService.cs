@@ -37,9 +37,21 @@ public class BlogService(IBlogRepository blogRepository, IMapper mapper) : IBlog
         await blogRepository.DeleteAsync(id);
     }
 
-    public async Task<List<ResultBlogDto>> GetAllBlogsWithCategoriesAsync()
+    public async Task<List<ResultBlogDto>> GetBlogsWithCategoriesAsync()
     {
-        var blogs = await blogRepository.GetAllBlogsWithCategoriesAsync();
+        var blogs = await blogRepository.GetBlogsWithCategoriesAsync();
         return mapper.Map<List<ResultBlogDto>>(blogs);
     }
+
+    public async Task<List<ResultBlogDto>> GetBlogsByCategoryIdAsync(int categoryId)
+    {
+        var blogs = await blogRepository.GetAllAsync(x => x.CategoryId == categoryId);
+        return mapper.Map<List<ResultBlogDto>>(blogs);
+    }
+
+    public async Task<List<ResultBlogDto>> GetLast3BlogsAsync()
+    {
+        var blogs = await blogRepository.GetLast3BlogsAsync();
+        return mapper.Map<List<ResultBlogDto>>(blogs);
+    } 
 }

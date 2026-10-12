@@ -1,0 +1,105 @@
+@model List<ResultBlogDto>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "/Views/UiLayout/Layout.cshtml";
+}
+
+	<div class="section search-result-wrap">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="heading">Kategori: @ViewBag.categoryName</div>
+				</div>
+			</div>
+			<div class="row posts-entry">
+				<div class="col-lg-8">
+					@foreach (var item in Model)
+					{
+						var description = item.Description ?? string.Empty;
+
+						var summary = description.Length > 100
+							? description[..100] + "..."
+							: description;
+
+						<div class="blog-entry d-flex blog-entry-search-item">
+							<a asp-controller="Blog"
+							   asp-action="Detail"
+							   asp-route-id="@item.Id"
+							   class="img-link me-4 flex-shrink-0 overflow-hidden rounded"
+							   style="width: 220px; height: 150px;">
+
+								<img src="@item.CoverImage"
+								     alt="@item.Title"
+								     class="w-100 h-100 object-fit-cover"/>
+							</a>
+							<div>
+								<span class="date">@item.CreatedOn &bullet; <a href="#">@ViewBag.categoryName</a></span>
+								<h2><a href="single.html">@item.Title</a></h2>
+								<p>@summary</p>
+								<p><a href="single.html" class="btn btn-sm btn-outline-primary">Oku</a></p>
+							</div>
+						</div>
+					}
+
+					<div class="row text-start pt-5 border-top">
+						<div class="col-md-12">
+							<div class="custom-pagination">
+								<span>1</span>
+								<a href="#">2</a>
+								<a href="#">3</a>
+								<a href="#">4</a>
+								<span>...</span>
+								<a href="#">15</a>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-lg-4 sidebar">
+					
+					<div class="sidebar-box search-form-wrap mb-4">
+						<form action="#" class="sidebar-search-form">
+							<span class="bi-search"></span>
+							<input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
+						</form>
+					</div>
+					<!-- END sidebar-box -->
+					@await Component.InvokeAsync("BlogsByCategoryLatestBlogsComponent")
+					<!-- END sidebar-box -->
+
+					<div class="sidebar-box">
+						<h3 class="heading">Categories</h3>
+						<ul class="categories">
+							<li><a href="#">Food <span>(12)</span></a></li>
+							<li><a href="#">Travel <span>(22)</span></a></li>
+							<li><a href="#">Lifestyle <span>(37)</span></a></li>
+							<li><a href="#">Business <span>(42)</span></a></li>
+							<li><a href="#">Adventure <span>(14)</span></a></li>
+						</ul>
+					</div>
+					<!-- END sidebar-box -->
+
+					<div class="sidebar-box">
+						<h3 class="heading">Tags</h3>
+						<ul class="tags">
+							<li><a href="#">Travel</a></li>
+							<li><a href="#">Adventure</a></li>
+							<li><a href="#">Food</a></li>
+							<li><a href="#">Lifestyle</a></li>
+							<li><a href="#">Business</a></li>
+							<li><a href="#">Freelancing</a></li>
+							<li><a href="#">Travel</a></li>
+							<li><a href="#">Adventure</a></li>
+							<li><a href="#">Food</a></li>
+							<li><a href="#">Lifestyle</a></li>
+							<li><a href="#">Business</a></li>
+							<li><a href="#">Freelancing</a></li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>

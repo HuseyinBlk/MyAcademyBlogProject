@@ -1,0 +1,45 @@
+@model UpdateBlogDto
+
+@{
+    ViewBag.Title = "Düzenle";
+    Layout = "_Layout";
+}
+
+<h3>Blog Düzenle</h3>
+
+<form method="post">
+    <input type="hidden" asp-for="Id"/>
+    <div class="form-group">
+        <label>Blog Başlığı</label>
+        <input type="text" asp-for="Title" class="form-control"/>
+        <span class="text-danger" asp-validation-for="Title"></span>
+    </div>
+    <div class="form-group">
+        <label>Açıklama</label>
+        <textarea type="text" asp-for="Description" class="form-control" rows="6"></textarea>
+        <span class="text-danger" asp-validation-for="Description"></span>
+    </div>
+    <div class="form-group">
+        <label>Kapak Resmi</label>
+        <input type="text" asp-for="CoverImage" class="form-control"/>
+        <span class="text-danger" asp-validation-for="CoverImage"></span>
+    </div>
+    <div class="form-group">
+        <label>Blog Resmi</label>
+        <input type="text" asp-for="BlogImage" class="form-control"/>
+        <span class="text-danger" asp-validation-for="BlogImage"></span>
+    </div>
+    <div class="form-group">
+        <label>Blog Resmi</label>
+        <input type="text" asp-for="BlogImage2" class="form-control"/>
+        <span class="text-danger" asp-validation-for="BlogImage2"></span>
+    </div>
+    <div class="form-group">
+        <label>Kategori</label>
+        <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-control"></select>
+        <span class="text-danger" asp-validation-for="CategoryId"></span>
+    </div>
+
+    <button class="btn btn-primary">Kaydet</button>
+
+</form>

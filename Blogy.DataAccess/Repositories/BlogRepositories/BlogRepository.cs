@@ -11,8 +11,13 @@ public class BlogRepository : GenericRepository<Blog>,IBlogRepository
     {
     }
 
-    public async Task<List<Blog>> GetAllBlogsWithCategoriesAsync()
+    public async Task<List<Blog>> GetBlogsWithCategoriesAsync()
     {
         return await _table.Include(b => b.Category).ToListAsync();
+    }
+
+    public async Task<List<Blog>> GetLast3BlogsAsync()
+    {
+        return await _table.OrderByDescending(x => x.Id).Take(3).ToListAsync();
     }
 }

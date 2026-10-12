@@ -45,4 +45,10 @@ public class CategoryService : ICategoryService
     {  
         await _categoryRepository.DeleteAsync(id);
     }
+
+    public async Task<List<ResultCategoryDto>> GetCategoriesWithBlogsAsync() 
+    {
+        var categories = await _categoryRepository.GetCategoriesWithBlogsAsync();
+        return _mapper.Map<List<ResultCategoryDto>>(categories);
+    }
 }

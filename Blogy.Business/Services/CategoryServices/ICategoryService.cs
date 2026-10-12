@@ -1,3 +1,4 @@
+using Blogy.Business.Dtos.BlogDtos;
 using Blogy.Business.Dtos.CategoryDtos;
 using Blogy.Entity.Entities;
 
@@ -10,5 +11,6 @@ public interface ICategoryService
     Task CreateAsync(CreateCategoryDto categoryDto);
     Task UpdateAsync(UpdateCategoryDto categoryDto);
     Task DeleteAsync(int id);
+    Task<List<ResultCategoryDto>> GetCategoriesWithBlogsAsync();
     
 }

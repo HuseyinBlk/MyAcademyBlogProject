@@ -12,5 +12,6 @@ public class ResultBlogDto : BaseDto
     public string? BlogImage2 { get; set; }
 
     public int CategoryId { get; set; }
-    public ResultCategoryDto Category { get; set; }
+    public string? CategoryName { get; set; }
+    public DateTime? CreatedOn { get; set; }
 }

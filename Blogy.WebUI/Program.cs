@@ -1,45 +1,12 @@
-using Blogy.Business.Mappings;
-using Blogy.Business.Services.BlogServices;
-using Blogy.Business.Services.CategoryServices;
-using Blogy.Business.Validators.CategoryValidators;
-using Blogy.DataAccess.Context;
-using Blogy.DataAccess.Repositories.BlogRepositories;
-using Blogy.DataAccess.Repositories.BlogTagRepositories;
-using Blogy.DataAccess.Repositories.CategoryRepositories;
-using Blogy.DataAccess.Repositories.GenericRepositories;
-using Blogy.DataAccess.Repositories.SocialRepositories;
-using Blogy.DataAccess.Repositories.TagRepositories;
-using Blogy.Entity.Entities;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
+using Blogy.Business.Extensions;
+using Blogy.DataAccess.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-//all automapper from one class
-builder.Services.AddAutoMapper(typeof(CategoryMappings).Assembly);
-//all Validators one class
-builder.Services
-    .AddFluentValidationAutoValidation()
-    .AddFluentValidationClientsideAdapters()
-    .AddValidatorsFromAssembly(typeof(CreateCategoryValidator).Assembly);
 
-// Repositories DI
-builder.Services.AddScoped<IBlogRepository, BlogRepository>();
-builder.Services.AddScoped<IBlogTagRepository, BlogTagRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<ISocialRepository, SocialRepository>();
-builder.Services.AddScoped<ITagRepository, TagRepository>();
-
-//Services DI
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IBlogService, BlogService>();
-
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddDataAccessServices(builder.Configuration);
+builder.Services.AddBuinessServices();
 
 builder.Services.AddControllersWithViews();
 

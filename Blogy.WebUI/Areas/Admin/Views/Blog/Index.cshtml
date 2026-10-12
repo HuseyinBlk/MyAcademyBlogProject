@@ -10,7 +10,7 @@
 
     <a asp-area="Admin"
        asp-controller="Blog"
-       asp-action="CreateBlog"
+       asp-action="Create"
        class="btn btn-primary">
         Yeni Blog Oluştur
     </a>
@@ -55,7 +55,7 @@
 
                     <td class="align-middle">
                         <span class="badge bg-secondary d-block w-100 text-center py-1">
-                            @item.Category.Name
+                            @item.CategoryName
                         </span>
                     </td>
 
