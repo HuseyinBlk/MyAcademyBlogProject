@@ -1,5 +1,7 @@
 using Blogy.Business.Extensions;
 using Blogy.DataAccess.Extensions;
+using Blogy.Entity.Entities;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,11 @@ builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddBuinessServices();
 
 builder.Services.AddControllersWithViews();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Login";
+
+});
 
 var app = builder.Build();
 
@@ -22,7 +29,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

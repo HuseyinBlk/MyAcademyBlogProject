@@ -1,0 +1,52 @@
+@model AppRole
+
+@{
+    ViewData["Title"] = "Rolü Düzenle";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h4 class="card-title mb-0 fw-bold">Düzenle</h4>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="post">
+                    
+                    <!-- Hata Mesajları Özeti -->
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+                    
+                    <input type="hidden" asp-for="Id" />
+                    <!-- Rol Adı Alanı -->
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-semibold">Rol Adı</label>
+                        <input type="text"
+                               asp-for="Name"
+                               class="form-control"
+                               placeholder="Örn: Admin, Yazar, Editör, Üye"
+                               required
+                               autofocus/>
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                        
+                    </div>
+
+                    <!-- Butonlar -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">
+                            Kaydet
+                        </button>
+
+                        <a asp-area="Admin"
+                           asp-controller="Role"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            Vazgeç
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

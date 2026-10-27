@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blogy.DataAccess.Repositories.CategoryRepositories;
 
-public class CategoryRepository : GenericRepository<Category> , ICategoryRepository
+public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
 {
     public CategoryRepository(AppDbContext context) : base(context)
     {

@@ -1,0 +1,59 @@
+@model RegisterDto
+
+@{
+    ViewBag.Title = "Kayıt Ol";
+    Layout = "/Views/UiLayout/Layout.cshtml";
+}
+
+<div class="section my-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow border-0 p-4 p-md-5">
+                    
+                    <h2 class="text-center mb-4">Hesap Oluştur</h2>
+
+                    <form method="post">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Ad</label>
+                                <input type="text" class="form-control" asp-for="FirstName" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Soyad</label>
+                                <input type="text" class="form-control" asp-for="LastName" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Kullanıcı Adı</label>
+                            <input type="text" class="form-control" asp-for="Username" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Adresi</label>
+                            <input type="email" class="form-control" asp-for="Email" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şifre</label>
+                            <input type="password" class="form-control" asp-for="Password" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şifre Onay</label>
+                            <input type="password" class="form-control" asp-for="ConfirmPassword" required />
+                        </div>
+
+                        <div class="text-danger mb-3">
+                            @Html.ValidationSummary()
+                        </div>
+
+                        <button class="btn btn-primary w-100 py-2" type="submit">Kayıt Ol</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

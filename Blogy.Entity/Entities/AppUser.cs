@@ -8,4 +8,7 @@ public class AppUser : IdentityUser<int>
     public string LastName { get; set; }
     public string? Title { get; set; }
     public string? ProfilImageUrl { get; set; }
+    
+    public IList<Blog> Blogs { get; set; }
+    public IList<Comment> Comments { get; set; }
 }

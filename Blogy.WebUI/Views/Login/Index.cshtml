@@ -1,0 +1,54 @@
+@model LoginDto
+
+@{
+    ViewBag.Title = "Giriş Yap";
+    Layout = "/Views/UiLayout/Layout.cshtml";
+}
+
+<div class="section my-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="card shadow border-0 p-4 p-md-5">
+                    
+                    <!-- Başlık ve Açıklama -->
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Giriş Yap</h2>
+                        <p class="text-muted small">Blogy hesabınıza erişmek için bilgilerinizi girin.</p>
+                    </div>
+
+                    <form method="post">
+                        <!-- Kullanıcı Adı -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Kullanıcı Adı</label>
+                            <input type="text" class="form-control" asp-for="UserName" placeholder="Kullanıcı adınızı girin" required autofocus />
+                        </div>
+
+                        <!-- Şifre -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Şifre</label>
+                            <input type="password" class="form-control" asp-for="Password" placeholder="••••••••" required />
+                        </div>
+
+                        <!-- Hata Mesajları Alanı -->
+                        <div class="text-danger mb-3 small" asp-validation-summary="ModelOnly"></div>
+
+                        <!-- Giriş Yap Butonu -->
+                        <button class="btn btn-primary w-100 py-2 mb-3 fw-semibold" type="submit">
+                            Giriş Yap
+                        </button>
+
+                        <!-- Kayıt Ol Yönlendirmesi -->
+                        <div class="text-center mt-3">
+                            <span class="text-muted small">Henüz bir hesabınız yok mu?</span>
+                            <a asp-controller="Register" asp-action="Index" class="text-primary fw-semibold small text-decoration-none ms-1">
+                                Kayıt Olun
+                            </a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
