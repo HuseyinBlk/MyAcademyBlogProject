@@ -1,5 +1,6 @@
 using Blogy.Business.Dtos.CategoryDtos;
 using Blogy.Business.Dtos.Common;
+using Blogy.Entity.Entities;
 
 namespace Blogy.Business.Dtos.BlogDtos;
 
@@ -13,5 +14,12 @@ public class ResultBlogDto : BaseDto
 
     public int CategoryId { get; set; }
     public string? CategoryName { get; set; }
+    
+    public IList<BlogTag> BlogTags { get; set; }
+    
+    public IList<Comment> Comments { get; set; }
+    
+    public int? WriterId { get; set; }
+    public AppUser Writer { get; set; }
     public DateTime? CreatedOn { get; set; }
 }

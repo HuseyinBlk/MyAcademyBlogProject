@@ -18,7 +18,7 @@ public class BlogService(IBlogRepository blogRepository, IMapper mapper) : IBlog
         var blog =  await blogRepository.GetByIdAsync(id);
         return mapper.Map<UpdateBlogDto>(blog);
     }
-
+    
     public async Task CreateAsync(CreateBlogDto blogDto)
     {
         var entity = mapper.Map<Blog>(blogDto);
@@ -53,5 +53,11 @@ public class BlogService(IBlogRepository blogRepository, IMapper mapper) : IBlog
     {
         var blogs = await blogRepository.GetLast3BlogsAsync();
         return mapper.Map<List<ResultBlogDto>>(blogs);
-    } 
+    }
+
+    public async Task<ResultBlogDto> GetBlogDetailsByIdAsync(int blogId)
+    {
+        var blog = await blogRepository.GetByIdAsync(blogId);
+        return mapper.Map<ResultBlogDto>(blog);
+    }
 }

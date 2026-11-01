@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blogy.WebUI.Areas.Admin.Controllers;
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = Roles.Admin)]
 [Area(Roles.Admin)]
 public class ProfileController(UserManager<AppUser> userManager, IMapper mapper, IFileService fileService) : Controller
 {

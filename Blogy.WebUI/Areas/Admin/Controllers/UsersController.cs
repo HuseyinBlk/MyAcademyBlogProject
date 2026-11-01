@@ -2,12 +2,14 @@ using AutoMapper;
 using Blogy.Business.Dtos.UserDtos;
 using Blogy.Entity.Entities;
 using Blogy.WebUI.Consts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blogy.WebUI.Areas.Admin.Controllers;
 
+[Authorize(Roles = Roles.Admin)]
 [Area(Roles.Admin)]
 public class UsersController(UserManager<AppUser> userManager,RoleManager<AppRole> roleManager, IMapper mapper) : Controller
 {

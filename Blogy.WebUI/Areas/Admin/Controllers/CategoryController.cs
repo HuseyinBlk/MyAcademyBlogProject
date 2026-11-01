@@ -1,11 +1,14 @@
 using AutoMapper;
 using Blogy.Business.Dtos.CategoryDtos;
 using Blogy.Business.Services.CategoryServices;
+using Blogy.WebUI.Consts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blogy.WebUI.Areas.Admin.Controllers;
 
-[Area("Admin")]
+[Authorize(Roles = Roles.Admin)]
+[Area(Roles.Admin)]
 public class CategoryController(ICategoryService _categoryService, IMapper _mapper) : Controller
 {
     

@@ -9,6 +9,6 @@ public class AppUser : IdentityUser<int>
     public string? Title { get; set; }
     public string? ProfilImageUrl { get; set; }
     
-    public IList<Blog> Blogs { get; set; }
-    public IList<Comment> Comments { get; set; }
+    public virtual IList<Blog> Blogs { get; set; }
+    public virtual IList<Comment> Comments { get; set; }
 }

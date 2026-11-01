@@ -1,6 +1,7 @@
 using Blogy.Business.Extensions;
 using Blogy.DataAccess.Extensions;
 using Blogy.Entity.Entities;
+using Blogy.WebUI.Filters;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -8,9 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDataAccessServices(builder.Configuration);
-builder.Services.AddBuinessServices();
+builder.Services.AddBusinessServices();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opt =>
+{
+    opt.Filters.Add<ValidationExceptionFilter>();
+});
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Login";

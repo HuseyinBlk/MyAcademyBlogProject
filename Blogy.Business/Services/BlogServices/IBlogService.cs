@@ -9,4 +9,5 @@ public interface IBlogService : IGenericService<ResultBlogDto,UpdateBlogDto,Crea
     Task<List<ResultBlogDto>> GetBlogsWithCategoriesAsync();
     Task<List<ResultBlogDto>> GetBlogsByCategoryIdAsync(int categoryId);
     Task<List<ResultBlogDto>> GetLast3BlogsAsync();
+    Task<ResultBlogDto> GetBlogDetailsByIdAsync(int blogId);
 }

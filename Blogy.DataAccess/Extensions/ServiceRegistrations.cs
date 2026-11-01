@@ -1,3 +1,4 @@
+using System.Reflection;
 using Blogy.DataAccess.Context;
 using Blogy.DataAccess.Repositories.BlogRepositories;
 using Blogy.DataAccess.Repositories.BlogTagRepositories;
@@ -9,6 +10,7 @@ using Blogy.Entity.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
 namespace Blogy.DataAccess.Extensions;
 
@@ -16,16 +18,19 @@ public static class ServiceRegistrations
 {
     public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IBlogTagRepository, BlogTagRepository>();
-        services.AddScoped<IBlogRepository, BlogRepository>();
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<ISocialRepository, SocialRepository>();
-        services.AddScoped<ITagRepository, TagRepository>();
-        services.AddScoped<ICommentRepository, CommentRepository>();
+        services.Scan(opt =>
+        {
+            opt.FromAssemblies(Assembly.GetExecutingAssembly())
+                .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Repository")))
+                .UsingRegistrationStrategy(registrationStrategy: RegistrationStrategy.Skip)
+                .AsImplementedInterfaces()
+                .WithScopedLifetime();
+        });
         
         services.AddDbContext<AppDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            options.UseLazyLoadingProxies();
         });
 
         services.AddIdentity<AppUser, AppRole>(options =>

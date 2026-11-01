@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Bloglar";
     Layout = "_Layout";
+    int count = 0;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -30,12 +31,11 @@
         </thead>
 
         <tbody>
-            @for (var index = 0; index < Model.Count; index++)
+            @foreach(var item in Model)
             {
-                var item = Model[index];
-
+                count++;
                 <tr>
-                    <td>@(index + 1)</td>
+                    <td>@count</td>
 
                     <td>
                         <img src="@item.CoverImage"
@@ -50,7 +50,7 @@
                     </td>
 
                     <td>
-                        @item.Description
+                        @(item.Description.Length > 100 ? item.Description.Substring(0,100) + "..." : item.Description)
                     </td>
 
                     <td class="align-middle">

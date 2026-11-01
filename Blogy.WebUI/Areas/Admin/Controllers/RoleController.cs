@@ -1,11 +1,14 @@
 using Blogy.Entity.Entities;
+using Blogy.WebUI.Consts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blogy.WebUI.Areas.Admin.Controllers;
 
-[Area("Admin")]
+[Authorize(Roles = Roles.Admin)]
+[Area(Roles.Admin)]
 public class RoleController(RoleManager<AppRole> roleManager) : Controller
 {
     // GET

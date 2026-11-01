@@ -46,4 +46,10 @@ public class CommentService(ICommentRepository commentRepository, IMapper mapper
     {
         await commentRepository.DeleteAsync(id);
     }
+
+    public async Task<List<ResultCommentDto>> GetCommentsWithBlogAndUserAsync()
+    {
+        var comments = await  commentRepository.GetCommentsWithBlogAndUserAsync();
+        return mapper.Map<List<ResultCommentDto>>(comments);
+    }
 }
