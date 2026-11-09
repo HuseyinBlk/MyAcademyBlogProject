@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Blogy.WebUI.Areas.Writer.Controllers;
 
-[Area("Writer")]
+[Area(Roles.Writer)]
 [Authorize(Roles = Roles.Writer)]
 public class AiArticleController(
     IAiService aiService,

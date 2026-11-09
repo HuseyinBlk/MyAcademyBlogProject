@@ -2,6 +2,7 @@ using Blogy.Business.Extensions;
 using Blogy.DataAccess.Extensions;
 using Blogy.Entity.Entities;
 using Blogy.WebUI.Filters;
+using Blogy.WebUI.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,19 +42,6 @@ app.MapControllerRoute(
         pattern: "{controller=Default}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-    var users = await userManager.Users.ToListAsync();
-
-    const string defaultPassword = "Password12*";
-
-    foreach (var user in users)
-    {
-        user.PasswordHash = userManager.PasswordHasher.HashPassword(user, defaultPassword);
-        await userManager.UpdateSecurityStampAsync(user);
-        await userManager.UpdateAsync(user);
-    }
-}
+await IdentityDataSeeder.SeedAsync(app.Services);
 
 app.Run();

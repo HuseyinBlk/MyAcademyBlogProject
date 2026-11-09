@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blogy.WebUI.Areas.User.Controllers;
 
-[Area("User")]
-[Authorize(Roles.User)]
+[Area(Roles.User)]
+[Authorize(Roles = Roles.User)]
 public class CommentController(ICommentService commentService, UserManager<AppUser> userManager) : Controller
 {
 

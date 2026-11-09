@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Blogy.WebUI.Areas.Writer.Controllers;
 
-[Area("Writer")]
+[Area(Roles.Writer)]
 [Authorize(Roles = Roles.Writer)]
 public class BlogController(IBlogService blogService,ICategoryService categoryService, UserManager<AppUser> userManager, IFileService fileService) : Controller
 {

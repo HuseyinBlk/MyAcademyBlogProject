@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blogy.WebUI.Areas.Admin.Controllers;
 
-[Area("Admin")]
+[Area(Roles.Admin)]
 [Authorize(Roles = Roles.Admin)]
 public class AboutController(IAboutService aboutService, IAiService aiService) : Controller
 {

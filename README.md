@@ -195,6 +195,15 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
    dotnet run --project Blogy.WebUI
    ```
 
+5. **Varsayılan Yönetici Girişi:**
+   Uygulama ilk kez çalıştırıldığında sistem otomatik olarak rolleri (`Admin`, `Writer`, `User`) ve varsayılan yönetici hesabını oluşturur:
+   * **Kullanıcı Adı:** `admin`
+   * **E-Posta:** `admin@blogy.com`
+   * **Şifre:** `Password12*`
+
+6. **Rol Atama ve Kullanıcı Yönetimi:**
+   Sisteme Kayıt Ol ekranından (`/Register`) kaydolan tüm kullanıcılar varsayılan olarak `User` rolünü alır. Kullanıcılara `Admin` veya `Writer` rolü yetkilendirmesi yapmak için yönetici hesabıyla giriş yapıp **Admin Paneli -> Kullanıcılar & Roller (`/Admin/Users`)** ekranından dilediğiniz rolleri atayabilirsiniz.
+
 ---
 
 ## Geliştirici
