@@ -75,7 +75,7 @@
 
             <ul class="nav flex-column">
 
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole(Roles.Admin))
                 {
                     <li class="nav-item text-uppercase nav-header mt-2 mb-1">Yönetim</li>
                     <li class="nav-item">
@@ -120,7 +120,7 @@
                     </li>
                 }
 
-                @if (User.IsInRole("Writer"))
+                @if (User.IsInRole(Roles.Writer))
                 {
                     <li class="nav-item text-uppercase nav-header mt-2 mb-1">Yazar İşlemleri</li>
                     <li class="nav-item">
@@ -140,7 +140,7 @@
                     </li>
                 }
 
-                @if (User.IsInRole("User") && !User.IsInRole("Admin") && !User.IsInRole("Writer"))
+                @if (User.IsInRole(Roles.User) && !User.IsInRole(Roles.Admin) && !User.IsInRole(Roles.Writer))
                 {
                     <li class="nav-item text-uppercase nav-header mt-2 mb-1">Hesabım</li>
                     <li class="nav-item">
@@ -152,13 +152,13 @@
 
                 <li class="nav-item text-uppercase nav-header mt-3 mb-1">Ayarlar</li>
                 <li class="nav-item">
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole(Roles.Admin))
                     {
                         <a class="nav-link" asp-area="Admin" asp-controller="Profile" asp-action="Index">
                             <i class="bi bi-person-gear"></i> Profilim
                         </a>
                     }
-                    else if (User.IsInRole("Writer"))
+                    else if (User.IsInRole(Roles.Writer))
                     {
                         <a class="nav-link" asp-area="Writer" asp-controller="Profile" asp-action="Index">
                             <i class="bi bi-person-gear"></i> Profilim
