@@ -24,28 +24,28 @@
 				<div class="col-lg-8">
 					@foreach (var item in Model)
 					{
-						var description = item.Description ?? string.Empty;
+						var rawDesc = System.Text.RegularExpressions.Regex.Replace(item.Description ?? string.Empty, "<.*?>", string.Empty);
+						var summary = rawDesc.Length > 140 ? rawDesc.Substring(0, 140) + "..." : rawDesc;
 
-						var summary = description.Length > 100
-							? description[..100] + "..."
-							: description;
-
-						<div class="blog-entry d-flex blog-entry-search-item">
+						<div class="blog-entry d-flex blog-entry-search-item align-items-center mb-4 pb-4 border-bottom">
 							<a asp-controller="Blog"
 							   asp-action="Details"
 							   asp-route-id="@item.Id"
-							   class="img-link me-4 flex-shrink-0 overflow-hidden rounded"
-							   style="width: 220px; height: 150px;">
+							   class="img-link me-4 flex-shrink-0 overflow-hidden rounded shadow-sm"
+							   style="width: 230px; height: 150px; min-width: 230px;">
 
-								<img src="@item.CoverImage"
+								<img src="@(string.IsNullOrEmpty(item.CoverImage) ? "/blogy-1.0.0/images/hero_1.jpg" : item.CoverImage)"
 								     alt="@item.Title"
 								     class="w-100 h-100 object-fit-cover"/>
 							</a>
-							<div>
-								<span class="date">@item.CreatedOn &bullet; <a href="#">@ViewBag.categoryName</a></span>
-								<h2><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h2>
-								<p>@summary</p>
-								<p><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Oku</a></p>
+							<div class="flex-grow-1">
+								<span class="date text-muted small">
+									<i class="bi bi-calendar3 me-1"></i>@(item.CreatedOn?.ToString("dd MMM yyyy") ?? DateTime.Now.ToString("dd MMM yyyy")) &bullet;
+									<span class="text-primary fw-semibold">@ViewBag.categoryName</span>
+								</span>
+								<h2 class="mt-1 mb-2 fs-5 fw-bold"><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="text-dark text-decoration-none">@item.Title</a></h2>
+								<p class="text-secondary small mb-3" style="line-height: 1.6;">@summary</p>
+								<p class="mb-0"><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">Devamını Oku <i class="bi bi-arrow-right"></i></a></p>
 							</div>
 						</div>
 					}

@@ -15,10 +15,8 @@
 		<div class="row align-items-stretch">
     @foreach (var blog in category.Blogs)
 {
-    var description = blog.Description ?? string.Empty;
-    var summary = description.Length > 100
-        ? description[..100] + "..."
-        : description;
+    var rawDesc = System.Text.RegularExpressions.Regex.Replace(blog.Description ?? string.Empty, "<.*?>", string.Empty);
+    var summary = rawDesc.Length > 100 ? rawDesc.Substring(0, 100) + "..." : rawDesc;
 
     <div class="col-lg-4 mb-4 d-flex">
         <div class="post-entry-alt h-100 w-100 d-flex flex-column">
