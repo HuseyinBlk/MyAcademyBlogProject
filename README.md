@@ -201,4 +201,4 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
 
 **Hüseyin BALIK**
 * GitHub: [@HuseyinBlk](https://github.com/HuseyinBlk)
-* LinkedIn: [Hüseyin Balık](https://linkedin.com/in/huseyinbalik)
+* LinkedIn: [Hüseyin Balık](https://www.linkedin.com/in/hüseyin-balık/)
