@@ -1,12 +1,12 @@
-# ✍️ Blogy - ASP.NET Core 10 N-Tier Blog Platformu & Yapay Zekâ Stüdyosu
+# Blogy - ASP.NET Core 10 N-Tier Blog Platformu & Yapay Zekâ Stüdyosu
 
 Bu proje, yazarların ve yöneticilerin zengin içerikler üretebildiği, okuyucuların yorum ve etkileşimde bulunabildiği, modern **N-Tier (Çok Katmanlı)** mimari prensiplerine uygun olarak geliştirilmiş ve **Google Gemini** ile **Hugging Face (Helsinki-NLP & Toxic-BERT)** yapay zekâ moderasyon teknolojileriyle güçlendirilmiş gelişmiş bir **ASP.NET Core 10 MVC** web uygulamasıdır.
 
-Uygulamanın ziyaretçi (UI) tarafında **Blogy Bootstrap Şablonu**, yönetim ve yazar (Admin / Writer / User) tarafında ise modern **Admin Dashboard Şablonu** kullanılarak hem görsel hem de işlevsel açıdan üst düzey bir kullanıcı deneyimi hedeflenmiştir.
+Uygulamanın ziyaretçi (UI) tarafında **Blogy Bootstrap Şablonu**, yönetim ve yazar (Admin / Writer / User) tarafında ise modern **Admin Dashboard Şablonu** kullanılarak hem görsel hem de işlevsel açıdan kurumsal ve temiz bir kullanıcı deneyimi hedeflenmiştir.
 
 ---
 
-## 🛠️ Teknolojik Altyapı ve Mimari
+## Teknolojik Altyapı ve Mimari
 
 * **Backend Framework:** ASP.NET Core 10.0 MVC (C# 13)
 * **Mimari Yaklaşım:** N-Tier Architecture (Entity, DataAccess, Business, WebUI)
@@ -27,7 +27,7 @@ Uygulamanın ziyaretçi (UI) tarafında **Blogy Bootstrap Şablonu**, yönetim v
 
 ---
 
-## 💾 Veritabanı Entity Yapısı (Veri Modelleri)
+## Veritabanı Entity Yapısı (Veri Modelleri)
 
 Projenin veritabanı şeması modüler, ilişkisel ve veri bütünlüğünü garanti altına alan bir yapıda tasarlanmıştır:
 
@@ -44,38 +44,38 @@ Projenin veritabanı şeması modüler, ilişkisel ve veri bütünlüğünü gar
 
 ---
 
-## 🎯 Sistem Özellikleri ve Modüller
+## Sistem Özellikleri ve Modüller
 
-### 1. 🤖 Çift Motorlu AI Moderasyon & Toksisite Analizi (Dual-Engine AI)
+### 1. Çift Motorlu AI Moderasyon & Toksisite Analizi (Dual-Engine AI)
 * **Hugging Face Router & Fallback:** Gelen yorumlar ilk aşamada Helsinki-NLP ile çevrilip Toxic-BERT modeli üzerinden toksisite analizine tabi tutulur. Model kota aşımı veya servis kesintisi yaşadığında sistem kesintisiz olarak Google Gemini API'ye fallback yapar.
 * **Yönetici Re-Analyze Araçları:** Admin panelinde analizi yapılamamış veya şüpheli yorumlar için tek tıkla hem **Hugging Face** hem de **Google Gemini** ile anlık yeniden analiz etme butonları yer alır.
 * **Toksisiteye Göre Otomatik Karar:** Skorlama sistemine göre güvenli yorumlar doğrudan onaylanırken, yüksek riskli yorumlar admin onayına düşürülür veya engellenir.
 
-### 2. 🔐 3 Katmanlı Identity & Rol Mimarisi (Areas)
+### 2. 3 Katmanlı Identity & Rol Mimarisi (Areas)
 * **Admin Area (`/Admin`):** Blog, kategori, etiket, kullanıcı, rol ve yorum moderasyonunun yapıldığı, sistem genelini yöneten tam yetkili ana merkez.
 * **Writer Area (`/Writer`):** Yazarların sadece kendi yazılarını oluşturup düzenleyebildiği, istatistiklerini görebildiği ve kendi yazılarına gelen yorumları yönetebildiği stüdyo.
 * **User Area (`/User`):** Okuyucuların profil bilgilerini düzenleyebildiği ve bloglara yaptıkları yorumların durumunu (Onaylandı/Beklemede) takip edebildiği panel.
 
-### 3. 📊 Dinamik Analitik Dashboard & Grafikler
+### 3. Dinamik Analitik Dashboard & Grafikler
 * **ApexCharts / Chart.js:** Kategori bazında blog dağılımları ve haftalık yayın trendleri dinamik olarak görselleştirilir.
 * **Canlı Sayaçlar:** Toplam blog, aktif yazar, incelenen yorum, moderasyon başarı oranı ve sistem durumunu özetleyen dinamik bilgi kartları.
 
-### 4. 🎨 Kusursuz Görsel & Metin Deneyimi (Harmonized UI)
+### 4. Standart Görsel & Metin Deneyimi (Harmonized UI)
 * **Standart Kart Oranları:** Tüm blog listeleme sayfalarında (Ana Sayfa, Bloglar, Kategori, Etiket) görseller `width: 230px; height: 150px` sabit kutuda `object-fit: cover` ile taşma yapmadan eşit oranda sunulur.
-* **Akıllı Metin Özetleme (Regex Truncation):** Blog özetleri HTML etiketlerinden arındırılarak kelime bütünlüğü korunur ve 140 karakter sonunda estetik `...` ile tamamlanır.
+* **Akıllı Metin Özetleme (Regex Truncation):** Blog özetleri HTML etiketlerinden arındırılarak kelime bütünlüğü korunur ve 140 karakter sonunda `...` ile tamamlanır.
 * **Sunucu Dosya Temizliği:** Blog görselleri (Kapak, Detay 1, Detay 2) veya profil fotoğrafları güncellendiğinde ya da silindiğinde eski dosyalar diskten (`IFileService.DeleteFile`) otomatik olarak temizlenir.
 
-### 5. 🔍 Sayfalama, Canlı Arama ve Etiket Gezintisi
+### 5. Sayfalama, Arama ve Etiket Gezintisi
 * **PagedList Entegrasyonu:** Büyük veri setlerinde performans kaybını önleyen dinamik sayfalama yapısı.
 * **Filtreleme & Arama:** Blog arama kutusu ve tek tıkla "Aramayı Temizle" seçeneği; kategori ve ilişkisel etiket bulutu ile akıcı navigasyon.
 
 ---
 
-## 📸 Proje Ekran Görüntüleri
+## Proje Ekran Görüntüleri
 
 Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ekran görüntülerini `Blogy.WebUI/wwwroot/images/screenshots/` klasörüne eklediğinizde burada otomatik olarak görüntülenecektir.
 
-### 🔐 Kimlik Doğrulama Ekranları (Auth UI)
+### Kimlik Doğrulama Ekranları (Auth UI)
 
 #### 1. Giriş Yap Ekranı (Login)
 ![Giriş Ekranı](Blogy.WebUI/wwwroot/images/screenshots/login.png)
@@ -85,7 +85,7 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
 
 ---
 
-### 🌐 Ziyaretçi Arayüzü (Visitor UI - Blogy)
+### Ziyaretçi Arayüzü (Visitor UI - Blogy)
 
 #### 1. Ana Sayfa (Vitrin & Öne Çıkan Bloglar)
 ![Ziyaretçi Ana Sayfa](Blogy.WebUI/wwwroot/images/screenshots/visitor_home.png)
@@ -110,7 +110,7 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
 
 ---
 
-### ⚙️ Yönetici Kontrol Paneli (Admin Area UI)
+### Yönetici Kontrol Paneli (Admin Area UI)
 
 #### 1. Yönetici Dashboard (Grafikler ve Canlı Sayaçlar)
 ![Admin Dashboard](Blogy.WebUI/wwwroot/images/screenshots/admin_dashboard.png)
@@ -135,7 +135,7 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
 
 ---
 
-### ✍️ Yazar Paneli Arayüzü (Writer Area UI)
+### Yazar Paneli Arayüzü (Writer Area UI)
 
 #### 1. Yazar Dashboard & Blog İstatistikleri
 ![Yazar Dashboard](Blogy.WebUI/wwwroot/images/screenshots/writer_dashboard.png)
@@ -151,7 +151,7 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
 
 ---
 
-### 👤 Okuyucu Paneli Arayüzü (User Area UI)
+### Okuyucu Paneli Arayüzü (User Area UI)
 
 #### 1. Okuyucu Profil ve Bilgi Güncelleme
 ![Kullanıcı Profil](Blogy.WebUI/wwwroot/images/screenshots/user_profile.png)
@@ -161,7 +161,7 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
 
 ---
 
-## 💻 Kurulum ve Çalıştırma
+## Kurulum ve Çalıştırma
 
 1. **Projeyi Bilgisayarınıza Klonlayın:**
    ```bash
@@ -197,7 +197,7 @@ Projenin tüm arayüzlerinin ekran görüntüleri aşağıda listelenmiştir. Ek
 
 ---
 
-## 👨‍💻 Geliştirici
+## Geliştirici
 
 **Hüseyin BALIK**
 * GitHub: [@HuseyinBlk](https://github.com/HuseyinBlk)
