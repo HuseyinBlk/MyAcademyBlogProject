@@ -7,6 +7,7 @@ using Blogy.DataAccess.Repositories.CommentRepositories;
 using Blogy.DataAccess.Repositories.SocialRepositories;
 using Blogy.DataAccess.Repositories.TagRepositories;
 using Blogy.Entity.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +42,17 @@ public static class ServiceRegistrations
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireUppercase = true;
         }).AddEntityFrameworkStores<AppDbContext>();
+        
+        services.Configure<SecurityStampValidatorOptions>(options =>
+        {
+            options.ValidationInterval = TimeSpan.Zero;
+        });
+        
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Login/Index"; 
+            options.AccessDeniedPath = "/Error/AccessDenied"; 
+        });
         
         return services;
     }

@@ -2,11 +2,10 @@
 @model List<ResultUserDto>
 
 @{
-    ViewData["Title"] = "Kullanıcılar";
-    Layout = "_Layout";
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+    Layout = "_PanelLayout";
 }
 
-<!-- Üst Başlık Bilgisi -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h2 class="mb-1 fw-bold">Kullanıcı Listesi</h2>
@@ -19,7 +18,6 @@
     </a>
 </div>
 
-<!-- Kullanıcılar Tablosu -->
 <div class="card shadow-sm border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -52,12 +50,11 @@
                             var user = Model[index];
 
                             <tr>
-                                <!-- 1. Sıra Numarası -->
+
                                 <td class="text-center fw-bold text-muted">
                                     @(index + 1)
                                 </td>
 
-                                <!-- 2. Ad Soyad ve Avatar -->
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center"
@@ -78,20 +75,18 @@
                                     </div>
                                 </td>
 
-                                <!-- 3. Kullanıcı Adı -->
                                 <td>
                                     <span class="badge bg-secondary-subtle text-secondary px-3 py-2 fs-6">
                                         @@@user.UserName
                                     </span>
                                 </td>
 
-                                <!-- 4. E-Posta -->
                                 <td>
                                     <a href="mailto:@user.Email" class="text-decoration-none text-muted">
                                         <i class="bi bi-envelope me-1"></i> @user.Email
                                     </a>
                                 </td>
-                                
+
                                 <td>
                                     @if (user.Roles != null && user.Roles.Any())
                                     {
@@ -109,8 +104,7 @@
                                         <span class="badge bg-light text-muted border">Rol Yok</span>
                                     }
                                 </td>
-                                
-                                <!-- 5. Durum -->
+
                                 <td class="text-center">
                                     <a asp-controller="Users" asp-action="AssignRole" asp-route-id="@user.Id" class="btn btn-warning text-white">Rol Ata</a>
                                 </td>

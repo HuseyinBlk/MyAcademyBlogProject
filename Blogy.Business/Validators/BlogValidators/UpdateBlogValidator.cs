@@ -10,7 +10,7 @@ public class UpdateBlogValidator : AbstractValidator<UpdateBlogDto>
     private const int DescriptionMinLength = 20;
     private const int DescriptionMaxLength = 5000;
     private const int ImageMaxLength = 500;
-    
+
     public UpdateBlogValidator()
     {
         RuleFor(blog => blog.Id)

@@ -14,66 +14,65 @@
 
 		<div class="row align-items-stretch">
     @foreach (var blog in category.Blogs)
-    {
-        var description = blog.Description ?? string.Empty;
+{
+    var description = blog.Description ?? string.Empty;
+    var summary = description.Length > 100
+        ? description[..100] + "..."
+        : description;
 
-        var summary = description.Length > 100
-            ? description[..100] + "..."
-            : description;
+    <div class="col-lg-4 mb-4 d-flex">
+        <div class="post-entry-alt h-100 w-100 d-flex flex-column">
 
-        <div class="col-lg-4 mb-4 d-flex">
-            <div class="post-entry-alt h-100 w-100 d-flex flex-column">
+            <a asp-controller="Blog"
+               asp-action="Details"
+               asp-route-id="@blog.Id"
+               class="img-link ratio ratio-16x9 overflow-hidden rounded">
+                <img src="@blog.CoverImage"
+                     alt="@blog.Title"
+                     class="w-100 h-100 object-fit-cover"/>
+            </a>
 
-                <a asp-controller="Blog"
-                   asp-action="Detail"
-                   asp-route-id="@blog.Id"
-                   class="img-link ratio ratio-16x9 overflow-hidden rounded">
+            <div class="excerpt flex-grow-1 d-flex flex-column p-3">
+                <h2>
+                    <a asp-controller="Blog"
+                       asp-action="Details"
+                       asp-route-id="@blog.Id">
+                        @blog.Title
+                    </a>
+                </h2>
 
-                    <img src="@blog.CoverImage"
-                         alt="@blog.Title"
-                         class="w-100 h-100 object-fit-cover"/>
-                </a>
+                <div class="post-meta align-items-center text-start clearfix mb-3">
+                    <figure class="author-figure mb-0 me-3 float-start">
+                        <img src="@(string.IsNullOrEmpty(blog.Writer?.ProfilImageUrl) ? "/blogy-1.0.0/images/person_1.jpg" : blog.Writer.ProfilImageUrl)"
+                             alt="@(blog.Writer != null ? $"{blog.Writer.FirstName} {blog.Writer.LastName}" : "Yazar")"
+                             class="img-fluid rounded-circle"
+                             style="width: 32px; height: 32px; object-fit: cover;"/>
+                    </figure>
 
-                <div class="excerpt flex-grow-1 d-flex flex-column p-3">
-                    <h2>
-                        <a asp-controller="Blog"
-                           asp-action="Detail"
-                           asp-route-id="@blog.Id">
-                            @blog.Title
-                        </a>
-                    </h2>
+                    <span class="d-inline-block mt-1">
+                        By <span class="fw-semibold">@(blog.Writer != null ? $"{blog.Writer.FirstName} {blog.Writer.LastName}" : "Blogy Yazarı")</span>
+                    </span>
 
-                    <div class="post-meta align-items-center text-start clearfix mb-3">
-                        <figure class="author-figure mb-0 me-3 float-start">
-                            <img src="~/blogy-1.0.0/images/person_1.jpg"
-                                 alt="David Anderson"
-                                 class="img-fluid"/>
-                        </figure>
-
-                        <span class="d-inline-block mt-1">
-                            By <a href="#">David Anderson</a>
-                        </span>
-
-                        <span>
-                            &nbsp;-&nbsp;
-                            @blog.CreatedOn?.ToShortDateString()
-                        </span>
-                    </div>
-
-                    <p>@summary</p>
-
-                    <p class="mt-auto mb-0">
-                        <a asp-controller="Blog"
-                           asp-action="Detail"
-                           asp-route-id="@blog.Id"
-                           class="read-more">
-                            Continue Reading
-                        </a>
-                    </p>
+                    <span>
+                        &nbsp;-&nbsp;
+                        @(blog.CreatedOn?.ToString("dd MMM yyyy") ?? "-")
+                    </span>
                 </div>
+
+                <p>@summary</p>
+
+                <p class="mt-auto mb-0">
+                    <a asp-controller="Blog"
+                       asp-action="Details"
+                       asp-route-id="@blog.Id"
+                       class="read-more">
+                        Devamını Oku
+                    </a>
+                </p>
             </div>
         </div>
-    }
+    </div>
+}
 </div>
 
 	</div>

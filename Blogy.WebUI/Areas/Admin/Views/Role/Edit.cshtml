@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Rolü Düzenle";
-    Layout = "_Layout";
+    Layout = "_PanelLayout";
 }
 
 <div class="row justify-content-center">
@@ -14,12 +14,11 @@
 
             <div class="card-body p-4">
                 <form method="post">
-                    
-                    <!-- Hata Mesajları Özeti -->
+
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
-                    
+
                     <input type="hidden" asp-for="Id" />
-                    <!-- Rol Adı Alanı -->
+
                     <div class="mb-4">
                         <label asp-for="Name" class="form-label fw-semibold">Rol Adı</label>
                         <input type="text"
@@ -29,10 +28,9 @@
                                required
                                autofocus/>
                         <span asp-validation-for="Name" class="text-danger small"></span>
-                        
+
                     </div>
 
-                    <!-- Butonlar -->
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary px-4">
                             Kaydet

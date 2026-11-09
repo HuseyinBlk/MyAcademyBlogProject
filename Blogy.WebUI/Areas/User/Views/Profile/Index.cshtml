@@ -1,0 +1,136 @@
+@model EditProfileDto
+
+@{
+    ViewData["Title"] = "Profilimi Düzenle";
+    Layout = "_PanelLayout";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+
+    <div class="col-lg-4 col-md-5 mb-4">
+        <div class="card shadow-sm border-0 text-center p-4">
+            <div class="position-relative d-inline-block mx-auto mb-3">
+                <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center overflow-hidden mx-auto shadow-sm"
+                     style="width: 120px; height: 120px;">
+                    @if (!string.IsNullOrEmpty(Model?.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="Profil Fotoğrafı" class="w-100 h-100 object-fit-cover" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-person-fill text-muted" style="font-size: 4rem;"></i>
+                    }
+                </div>
+            </div>
+
+            <h4 class="fw-bold mb-1">@(Model?.FirstName) @(Model?.LastName)</h4>
+            <p class="text-muted small mb-2">@@@(Model?.UserName)</p>
+
+            <hr class="my-3 text-muted" />
+
+            <div class="text-start small text-muted">
+                <p class="mb-2"><i class="bi bi-envelope me-2"></i> @(Model?.Email ?? "Belirtilmedi")</p>
+                <p class="mb-0"><i class="bi bi-telephone me-2"></i> @(Model?.PhoneNumber ?? "Belirtilmedi")</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8 col-md-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h5 class="card-title mb-0 fw-bold">Profil Bilgilerini Güncelle</h5>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="post" asp-area="User" asp-controller="Profile" asp-action="SaveProfile" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                    <input type="hidden" asp-for="ImageUrl" />
+
+                    <h6 class="fw-bold text-primary mb-3">
+                        <i class="bi bi-person-lines-fill me-1"></i> Kişisel Bilgiler
+                    </h6>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Ad</label>
+                            <input type="text" class="form-control" asp-for="FirstName" placeholder="Adınız" required />
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Soyad</label>
+                            <input type="text" class="form-control" asp-for="LastName" placeholder="Soyadınız" required />
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Kullanıcı Adı</label>
+                            <input type="text" class="form-control" asp-for="UserName" placeholder="kullaniciadi" required />
+                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">E-Posta</label>
+                            <input type="email" class="form-control" asp-for="Email" placeholder="ornek@mail.com" required />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Telefon Numarası</label>
+                            <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="05XXXXXXXXX" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Profil Fotoğrafı Seç</label>
+                            <input type="file" class="form-control" asp-for="ImageFile" accept="image/*" />
+                            <div class="form-text small">Yeni fotoğraf seçmezseniz mevcut fotoğrafınız korunacaktır.</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 text-muted" />
+
+                    <h6 class="fw-bold text-primary mb-3">
+                        <i class="bi bi-shield-lock me-1"></i> Şifre Değiştir (İsteğe Bağlı)
+                    </h6>
+                    <p class="text-muted small mb-3">Şifrenizi değiştirmek istemiyorsanız bu alanları boş bırakabilirsiniz.</p>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Mevcut Şifreniz</label>
+                            <input type="password" class="form-control" asp-for="CurrentPassword" placeholder="••••••••" />
+                            <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Yeni Şifre</label>
+                            <input type="password" class="form-control" asp-for="NewPassword" placeholder="••••••••" />
+                            <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Yeni Şifre (Tekrar)</label>
+                            <input type="password" class="form-control" asp-for="ConfirmNewPassword" placeholder="••••••••" />
+                            <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+                            <i class="bi bi-check2-circle me-1"></i> Değişiklikleri Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

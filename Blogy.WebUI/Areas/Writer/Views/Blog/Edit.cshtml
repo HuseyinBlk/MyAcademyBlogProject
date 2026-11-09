@@ -1,0 +1,144 @@
+@model UpdateBlogDto
+
+@{
+    ViewData["Title"] = "Blogu Güncelle";
+    Layout = "_PanelLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Blog Yazısını Güncelle</h3>
+        <p class="text-muted small mb-0">Yazınızın içeriğini, görsellerini, etiketlerini veya kategorisini düzenleyebilirsiniz.</p>
+    </div>
+    <a asp-area="Writer" asp-controller="Blog" asp-action="Index" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+        <i class="bi bi-arrow-left"></i> Bloglarıma Dön
+    </a>
+</div>
+
+<form asp-area="Writer" asp-controller="Blog" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id"/>
+    <input type="hidden" asp-for="CoverImage"/>
+    <input type="hidden" asp-for="BlogImage"/>
+    <input type="hidden" asp-for="BlogImage2"/>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-4"></div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square text-primary"></i> İçerik Detayları
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label fw-semibold text-dark">Blog Başlığı <span class="text-danger">*</span></label>
+                        <input type="text" asp-for="Title" class="form-control" required />
+                        <span class="text-danger small" asp-validation-for="Title"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold text-dark">Blog İçeriği <span class="text-danger">*</span></label>
+                        <textarea asp-for="Description" class="form-control" rows="14" required></textarea>
+                        <span class="text-danger small" asp-validation-for="Description"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-tag text-primary"></i> Kategori
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <label asp-for="CategoryId" class="form-label fw-semibold small text-secondary">Kategori</label>
+                    <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-select" required></select>
+                    <span class="text-danger small" asp-validation-for="CategoryId"></span>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-tags text-primary"></i> Etiketler (Tags)
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <label asp-for="Tags" class="form-label fw-semibold small text-secondary">Yazı Etiketleri</label>
+                    <input type="text" asp-for="Tags" class="form-control" placeholder="Örn: csharp, dotnet, yapay-zeka" />
+                    <div class="form-text text-muted" style="font-size: 0.75rem;">
+                        Etiketleri virgülle (,) ayırarak düzenleyebilirsiniz.
+                    </div>
+                    <span class="text-danger small" asp-validation-for="Tags"></span>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-images text-primary"></i> Blog Görselleri
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-secondary">Kapak Görseli</label>
+                        @if (!string.IsNullOrEmpty(Model?.CoverImage))
+                        {
+                            <div class="mb-2 text-center">
+                                <img src="@Model.CoverImage" alt="Mevcut Kapak" class="img-fluid rounded border shadow-sm" style="max-height: 110px; width: 100%; object-fit: cover;" />
+                                <div class="small text-muted mt-1" style="font-size: 0.75rem;">Mevcut Kapak Görseli</div>
+                            </div>
+                        }
+                        <input type="file" name="coverImageFile" class="form-control form-control-sm" accept="image/*" />
+                        <div class="form-text text-muted" style="font-size: 0.75rem;">Değiştirmek istemiyorsanız boş bırakın.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-secondary">İçerik Görseli 1</label>
+                        @if (!string.IsNullOrEmpty(Model?.BlogImage))
+                        {
+                            <div class="mb-2 text-center">
+                                <img src="@Model.BlogImage" alt="İçerik Görseli 1" class="img-fluid rounded border shadow-sm" style="max-height: 100px; width: 100%; object-fit: cover;" />
+                                <div class="small text-muted mt-1" style="font-size: 0.75rem;">Mevcut Görsel 1</div>
+                            </div>
+                        }
+                        <input type="file" name="blogImageFile1" class="form-control form-control-sm" accept="image/*" />
+                        <div class="form-text text-muted" style="font-size: 0.75rem;">Değiştirmek istemiyorsanız boş bırakın.</div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label fw-semibold small text-secondary">İçerik Görseli 2</label>
+                        @if (!string.IsNullOrEmpty(Model?.BlogImage2))
+                        {
+                            <div class="mb-2 text-center">
+                                <img src="@Model.BlogImage2" alt="İçerik Görseli 2" class="img-fluid rounded border shadow-sm" style="max-height: 100px; width: 100%; object-fit: cover;" />
+                                <div class="small text-muted mt-1" style="font-size: 0.75rem;">Mevcut Görsel 2</div>
+                            </div>
+                        }
+                        <input type="file" name="blogImageFile2" class="form-control form-control-sm" accept="image/*" />
+                        <div class="form-text text-muted" style="font-size: 0.75rem;">Değiştirmek istemiyorsanız boş bırakın.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3 bg-light">
+                <div class="card-body p-3 text-center">
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-2">
+                        <i class="bi bi-check-circle-fill"></i> Değişiklikleri Kaydet
+                    </button>
+                    <a asp-area="Writer" asp-controller="Blog" asp-action="Index" class="btn btn-link text-secondary text-decoration-none small">
+                        İptal Et
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -11,14 +11,13 @@ namespace Blogy.WebUI.Areas.Admin.Controllers;
 [Area(Roles.Admin)]
 public class CategoryController(ICategoryService _categoryService, IMapper _mapper) : Controller
 {
-    
-    // GET
+
     public async Task<IActionResult> Index()
     {
         var categories = await _categoryService.GetAllAsync();
         return View(categories);
     }
-    
+
     public async Task<IActionResult> Create(){
         return View();
     }
@@ -30,7 +29,7 @@ public class CategoryController(ICategoryService _categoryService, IMapper _mapp
         {
             return View(categoryDto);
         }
-        
+
         await _categoryService.CreateAsync(categoryDto);
         return RedirectToAction("Index");
     }
@@ -38,12 +37,12 @@ public class CategoryController(ICategoryService _categoryService, IMapper _mapp
     public async Task<IActionResult> Edit(int id)
     {
         var category = await _categoryService.GetByIdAsync(id);
-        
+
         if (category == null)
         {
             return NotFound();
         }
-        
+
         return View(category);
     }
 
@@ -54,7 +53,7 @@ public class CategoryController(ICategoryService _categoryService, IMapper _mapp
         {
             return View(categoryDto);
         }
-        
+
         await _categoryService.UpdateAsync(categoryDto);
         return RedirectToAction("Index");
     }
@@ -62,8 +61,7 @@ public class CategoryController(ICategoryService _categoryService, IMapper _mapp
     public async Task<IActionResult> Delete(int id)
     {
         await  _categoryService.DeleteAsync(id);
-        return RedirectToAction("Index"); 
+        return RedirectToAction("Index");
     }
-    
-    
+
 }

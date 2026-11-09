@@ -23,25 +23,58 @@
     </div>
   </div>
 
+  @if (!string.IsNullOrEmpty(ViewBag.Search as string))
+  {
+    <div class="alert alert-info text-center my-3">
+      <i class="bi bi-search me-1"></i> "<strong>@ViewBag.Search</strong>" için arama sonuçları gösteriliyor.
+      <a asp-action="Index" class="ms-2 text-decoration-none badge bg-secondary">Aramayı Temizle</a>
+    </div>
+  }
+
   <div class="section search-result-wrap">
     <div class="container">
-      
+
       <div class="row posts-entry">
         <div class="col-lg-8">
+
           @foreach (var item in Model)
           {
-          <div class="blog-entry d-flex blog-entry-search-item">
-            <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="img-link me-4">
-              <img src="@item.CoverImage" alt="@item.Title" class="img-fluid">
-            </a>
-            <div>
-              <span class="date">Apr. 14th, 2022 &bullet; <a href="#">@item.CategoryName</a></span>
-              <h2><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h2>
-              <p>@(item.Description.Length > 100 ? item.Description.Substring(0,100) : item.Description)</p>
-              <p><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Read More</a></p>
-            </div>
-          </div>
-            
+              var rawDesc = System.Text.RegularExpressions.Regex.Replace(item.Description ?? string.Empty, "<.*?>", string.Empty);
+              var summary = rawDesc.Length > 140 ? rawDesc.Substring(0, 140) + "..." : rawDesc;
+
+              <div class="blog-entry d-flex blog-entry-search-item align-items-center mb-4 pb-4 border-bottom">
+
+                <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id"
+                   class="img-link me-4 flex-shrink-0 overflow-hidden rounded shadow-sm"
+                   style="width: 230px; height: 150px; min-width: 230px;">
+                  <img src="@(string.IsNullOrEmpty(item.CoverImage) ? "/blogy-1.0.0/images/hero_1.jpg" : item.CoverImage)"
+                       alt="@item.Title"
+                       class="w-100 h-100 object-fit-cover">
+                </a>
+
+                <div class="flex-grow-1">
+                  <span class="date text-muted small">
+                    <i class="bi bi-calendar3 me-1"></i>@(item.CreatedOn?.ToString("dd MMM yyyy") ?? DateTime.Now.ToString("dd MMM yyyy")) &bullet;
+                    <a asp-controller="Blog" asp-action="GetBlogsByCategory" asp-route-id="@item.CategoryId" class="text-primary fw-semibold text-decoration-none">
+                      @item.CategoryName
+                    </a>
+                  </span>
+
+                  <h2 class="mt-1 mb-2 fs-5 fw-bold">
+                    <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="text-dark text-decoration-none">
+                      @item.Title
+                    </a>
+                  </h2>
+
+                  <p class="text-secondary small mb-3" style="line-height: 1.6;">@summary</p>
+
+                  <p class="mb-0">
+                    <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+                      Devamını Oku <i class="bi bi-arrow-right"></i>
+                    </a>
+                  </p>
+                </div>
+              </div>
           }
 
           <div class="row text-start pt-5 border-top">
@@ -50,6 +83,7 @@
                 <pager list="@Model"
                        asp-controller="Blog"
                        asp-action="Index"
+                       asp-route-search="@ViewBag.Search"
                        param-page-number="pageNumber"
                        options="@pagerOptions" />
               </div>
@@ -61,83 +95,17 @@
         <div class="col-lg-4 sidebar">
 
           <div class="sidebar-box search-form-wrap mb-4">
-            <form action="#" class="sidebar-search-form">
+            <form asp-controller="Blog" asp-action="Index" method="get" class="sidebar-search-form">
               <span class="bi-search"></span>
-              <input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
+              <input type="text" name="search" value="@ViewBag.Search" class="form-control" id="s" placeholder="Blog ara ve Enter'a bas...">
             </form>
           </div>
-          <!-- END sidebar-box -->
-          <div class="sidebar-box">
-            <h3 class="heading">Popular Posts</h3>
-            <div class="post-entry-sidebar">
-              <ul>
-                <li>
-                  <a href="">
-                    <img src="images/img_1_sq.jpg" alt="Image placeholder" class="me-4 rounded">
-                    <div class="text">
-                      <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                      <div class="post-meta">
-                        <span class="mr-2">March 15, 2018 </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="">
-                    <img src="images/img_2_sq.jpg" alt="Image placeholder" class="me-4 rounded">
-                    <div class="text">
-                      <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                      <div class="post-meta">
-                        <span class="mr-2">March 15, 2018 </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="">
-                    <img src="images/img_3_sq.jpg" alt="Image placeholder" class="me-4 rounded">
-                    <div class="text">
-                      <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                      <div class="post-meta">
-                        <span class="mr-2">March 15, 2018 </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <!-- END sidebar-box -->
 
-          <div class="sidebar-box">
-            <h3 class="heading">Categories</h3>
-            <ul class="categories">
-              <li><a href="#">Food <span>(12)</span></a></li>
-              <li><a href="#">Travel <span>(22)</span></a></li>
-              <li><a href="#">Lifestyle <span>(37)</span></a></li>
-              <li><a href="#">Business <span>(42)</span></a></li>
-              <li><a href="#">Adventure <span>(14)</span></a></li>
-            </ul>
-          </div>
-          <!-- END sidebar-box -->
+          @await Component.InvokeAsync("BlogsByCategoryLatestBlogsComponent")
 
-          <div class="sidebar-box">
-            <h3 class="heading">Tags</h3>
-            <ul class="tags">
-              <li><a href="#">Travel</a></li>
-              <li><a href="#">Adventure</a></li>
-              <li><a href="#">Food</a></li>
-              <li><a href="#">Lifestyle</a></li>
-              <li><a href="#">Business</a></li>
-              <li><a href="#">Freelancing</a></li>
-              <li><a href="#">Travel</a></li>
-              <li><a href="#">Adventure</a></li>
-              <li><a href="#">Food</a></li>
-              <li><a href="#">Lifestyle</a></li>
-              <li><a href="#">Business</a></li>
-              <li><a href="#">Freelancing</a></li>
-            </ul>
-          </div>
+          @await Component.InvokeAsync("CategoryListComponent")
+
+          @await Component.InvokeAsync("TagListComponent")
 
         </div>
       </div>

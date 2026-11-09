@@ -6,4 +6,5 @@ namespace Blogy.DataAccess.Repositories.CommentRepositories;
 public interface ICommentRepository : IGenericRepository<Comment>
 {
     Task<List<Comment>> GetCommentsWithBlogAndUserAsync();
+    
 }

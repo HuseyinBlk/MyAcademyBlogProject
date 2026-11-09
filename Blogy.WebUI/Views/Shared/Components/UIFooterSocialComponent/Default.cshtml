@@ -1,0 +1,18 @@
+@model List<ResultSocialDto>
+
+<div class="widget">
+    <h3>Sosyal Medya</h3>
+    <ul class="list-unstyled social">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <li>
+                    <a href="@item.Url" target="_blank" title="@item.Name">
+                        <span class="@item.Icon"></span>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+</div>

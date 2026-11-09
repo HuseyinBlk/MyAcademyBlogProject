@@ -1,0 +1,18 @@
+@model List<ResultCategoryDto>
+
+<div class="sidebar-box">
+    <h3 class="heading">Kategoriler</h3>
+    <ul class="categories">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <li>
+                    <a asp-controller="Blog" asp-action="GetBlogsByCategory" asp-route-id="@item.Id">
+                        @item.Name <span>(@(item.Blogs?.Count ?? 0))</span>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+</div>

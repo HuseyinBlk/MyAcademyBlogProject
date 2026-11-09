@@ -1,0 +1,8 @@
+@model string
+
+<div class="widget">
+    <h3 class="mb-4">Hakkımızda</h3>
+    <p style="line-height: 1.7;">
+        @(!string.IsNullOrEmpty(Model) ? Model : "Blogy, modern yazılım teknolojileri ve zengin içerikleri okuyucularıyla buluşturan profesyonel bir blog platformudur.")
+    </p>
+</div>

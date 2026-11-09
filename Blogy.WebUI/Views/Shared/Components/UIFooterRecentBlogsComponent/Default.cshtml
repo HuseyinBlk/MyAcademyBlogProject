@@ -1,0 +1,33 @@
+@model List<ResultBlogDto>
+
+<div class="widget">
+    <h3 class="mb-4">Son Yazılar</h3>
+    <div class="post-entry-footer">
+        <ul>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id">
+                            <img src="@(string.IsNullOrEmpty(item.CoverImage) ? "/blogy-1.0.0/images/img_1_sq.jpg" : item.CoverImage)"
+                                 alt="@item.Title"
+                                 class="me-4 rounded"
+                                 style="width: 72px; height: 72px; object-fit: cover;">
+                            <div class="text">
+                                <h4>@item.Title</h4>
+                                <div class="post-meta">
+                                    <span class="mr-2">@(item.CreatedOn?.ToString("dd MMM yyyy") ?? "-")</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                }
+            }
+            else
+            {
+                <li><p class="text-muted">Henüz yazı paylaşılmadı.</p></li>
+            }
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,221 @@
+@model CreateBlogDto
+
+@{
+    ViewData["Title"] = "Yazar AI Stüdyosu";
+    Layout = "_PanelLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">
+            <i class="bi bi-cpu me-2"></i>AI Makale Stüdyosu
+        </h3>
+        <p class="text-muted small mb-0">İster sıfırdan makale tasarlayın, ister yarım taslağınızı verip 1000+ karakterlik profesyonel bir bloga dönüştürün.</p>
+    </div>
+    <a asp-area="Writer" asp-controller="Blog" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Bloglarıma Dön
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-3 mb-4" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+    <div class="card-body p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="text-white fw-bold mb-0">
+                <i class="bi bi-magic me-2"></i>İçerik Geliştirici & Tasarımcı
+            </h5>
+            <span class="badge bg-secondary text-light px-3 py-1 small">Min. 1000 Karakter & Güvenlik Korumalı</span>
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label text-white small fw-semibold">Anahtar Kelimeler</label>
+                <input type="text" id="aiKeywords" class="form-control" placeholder="Örn: C#, ASP.NET Core, Clean Architecture" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label text-white small fw-semibold">Özel İstekleriniz & Üslup (Tone of Voice)</label>
+                <input type="text" id="aiInstructions" class="form-control" placeholder="Örn: Samimi bir dille yaz, teknik detay ve kod mimarisi önerileri ver." />
+            </div>
+
+            <div class="col-12">
+                <label class="form-label text-white small fw-semibold">
+                    Ham Taslağınız veya Konu Özeti
+                    <span class="text-white-50 fw-normal fst-italic">(Varsa kendi yazdığınız taslağı yapıştırın, AI düzenleyip büyütsün; yoksa sadece konuyu yazın)</span>
+                </label>
+                <textarea id="aiRawDraft" class="form-control" rows="4" placeholder="Kendi notlarınızı, yarım kalmış makalenizi buraya yapıştırabilirsiniz ya da sıfırdan anlatılmasını istediğiniz konuyu özetleyebilirsiniz..."></textarea>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 pt-2 border-top border-secondary">
+            <span id="aiStatusText" class="text-light small fw-semibold"></span>
+            <button type="button" id="btnGenerate" class="btn btn-primary px-4 py-2 fw-bold d-flex align-items-center gap-2">
+                <span id="aiSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                <i class="bi bi-stars" id="aiIcon"></i> Makaleyi Üret / Düzenle
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="publishSection" class="d-none">
+    <div class="alert alert-success d-flex align-items-center justify-content-between py-3 mb-4 shadow-sm border-0">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-check-circle-fill fs-4 text-success"></i>
+            <div>
+                <strong class="d-block">Makaleniz Hazır!</strong>
+                <span class="small text-muted" id="charCountSummary">Aşağıdaki formu kontrol edip dilediğiniz gibi düzenleyebilir ve yayına alabilirsiniz.</span>
+            </div>
+        </div>
+    </div>
+
+    <form asp-area="Writer" asp-controller="AiArticle" asp-action="PublishBlog" method="post" enctype="multipart/form-data">
+        <div class="row g-4">
+
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0 fw-bold text-dark">
+                            <i class="bi bi-file-earmark-text text-primary me-2"></i>Hazırlanan Blog İçeriği
+                        </h6>
+                        <span id="charCountBadge" class="badge bg-light text-dark border">0 Karakter</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <label asp-for="Title" class="form-label fw-bold text-secondary">Başlık <span class="text-danger">*</span></label>
+                            <input type="text" asp-for="Title" id="blogTitleInput" class="form-control form-control-lg fw-semibold" required />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold text-secondary">İçerik <span class="text-danger">*</span></label>
+                            <textarea asp-for="Description" id="blogDescriptionInput" class="form-control" rows="14" style="line-height: 1.8;" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h6 class="card-title mb-0 fw-semibold text-dark"><i class="bi bi-tag text-primary me-1"></i> Kategori</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <select asp-for="CategoryId" id="categorySelect" asp-items="@ViewBag.Categories" class="form-select" required></select>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h6 class="card-title mb-0 fw-semibold text-dark"><i class="bi bi-tags text-primary me-1"></i> Etiketler</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <input type="text" asp-for="Tags" id="blogTagsInput" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h6 class="card-title mb-0 fw-semibold text-dark"><i class="bi bi-image text-primary me-1"></i> Kapak Resmi</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <input type="file" name="coverImageFile" class="form-control form-control-sm" accept="image/*" />
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 rounded-3 bg-light">
+                    <div class="card-body p-3 text-center">
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-6 d-flex align-items-center justify-content-center gap-2 mb-2 shadow-sm">
+                            <i class="bi bi-send-check-fill"></i> Blog Olarak Yayınla
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnGenerate").click(function () {
+                const keywords = $("#aiKeywords").val().trim();
+                const rawDraft = $("#aiRawDraft").val().trim();
+                const instructions = $("#aiInstructions").val().trim();
+
+                if (!keywords && !rawDraft) {
+                    Swal.fire('Eksik Bilgi', 'Lütfen anahtar kelimeleri veya taslak metninizi giriniz.', 'warning');
+                    return;
+                }
+
+                const $btn = $("#btnGenerate");
+                $btn.prop("disabled", true);
+                $("#aiSpinner").removeClass("d-none");
+                $("#aiIcon").addClass("d-none");
+                $("#aiStatusText").text("Yapay zeka içeriği hazırlıyor ve güvenlik denetiminden geçiriyor...");
+
+                $.ajax({
+                    url: '/Writer/AiArticle/Generate',
+                    type: 'POST',
+                    data: { keywords: keywords, rawDraft: rawDraft, customInstructions: instructions },
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.title === "Güvenlik Uyarısı" || response.title === "Güvenlik Engeli") {
+                                Swal.fire('Güvenlik Uyarısı', response.content, 'error');
+                                $("#aiStatusText").text("");
+                                return;
+                            }
+
+                            $("#blogTitleInput").val(response.title);
+                            $("#blogDescriptionInput").val(response.content);
+                            $("#blogTagsInput").val(response.tags);
+
+                            if (response.suggestedCategory) {
+                                const targetCat = response.suggestedCategory.trim().toLowerCase();
+                                $("#categorySelect option").each(function () {
+                                    if ($(this).text().trim().toLowerCase() === targetCat) {
+                                        $(this).prop('selected', true);
+                                    }
+                                });
+                            }
+
+                            const charCount = response.content ? response.content.length : 0;
+                            $("#charCountBadge").text(`${charCount} Karakter`);
+                            $("#charCountSummary").text(`${charCount} karakter uzunluğunda içerik hazırlandı.`);
+
+                            $("#publishSection").removeClass("d-none");
+                            $('html, body').animate({
+                                scrollTop: $("#publishSection").offset().top - 20
+                            }, 500);
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'İçerik Hazır!',
+                                text: `${charCount} karakterlik makale başarıyla oluşturuldu. Aşağıdan inceleyebilirsiniz.`
+                            });
+
+                            $("#aiStatusText").html(`<i class="bi bi-check-circle-fill text-success"></i> Hazırlandı!`);
+                        } else {
+                            Swal.fire('Hata', response.message, 'error');
+                            $("#aiStatusText").text("");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'Yapay zeka ile iletişim kurulurken bir sorun oluştu.', 'error');
+                        $("#aiStatusText").text("");
+                    },
+                    complete: function () {
+                        $btn.prop("disabled", false);
+                        $("#aiSpinner").addClass("d-none");
+                        $("#aiIcon").removeClass("d-none");
+                    }
+                });
+            });
+
+            $("#blogDescriptionInput").on('input', function () {
+                $("#charCountBadge").text(`${$(this).val().length} Karakter`);
+            });
+        });
+    </script>
+}

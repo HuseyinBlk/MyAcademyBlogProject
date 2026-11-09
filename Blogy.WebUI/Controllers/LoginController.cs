@@ -6,7 +6,7 @@ namespace Blogy.WebUI.Controllers;
 
 public class LoginController(IUserService userService) : Controller
 {
-    // GET
+
     public IActionResult Index()
     {
         return View();
@@ -21,14 +21,14 @@ public class LoginController(IUserService userService) : Controller
         }
 
         var result = await userService.LoginAsync(model);
-        
+
         if (!result.Succeeded)
         {
             ModelState.AddModelError(string.Empty, "Kullanıcı adı veya şifre hatalı.");
             return View(model);
         }
-        
-        return RedirectToAction("Index", "Blog", new { area = "Admin" });
+
+        return RedirectToAction("Index", "Blog");
     }
 
     public async Task<IActionResult> Logout()

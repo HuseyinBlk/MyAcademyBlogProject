@@ -8,7 +8,7 @@ namespace Blogy.WebUI.Filters;
 
 public class ValidationExceptionFilter : IExceptionFilter
 {
-    // ViewDataDictionary oluştururken ASP.NET Core'un ihtiyaç duyduğu model sağlayıcısı:
+
     private readonly IModelMetadataProvider _modelMetadataProvider;
 
     public ValidationExceptionFilter(IModelMetadataProvider modelMetadataProvider)
@@ -23,15 +23,13 @@ public class ValidationExceptionFilter : IExceptionFilter
             return;
         }
 
-  
         foreach (var error in validationException.Errors)
         {
             context.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
         }
-        
+
         var actionName = context.RouteData.Values["action"]?.ToString() ?? "Index";
 
-        
         var submittedModel = context.ActionDescriptor.Parameters
             .Select(p => context.HttpContext.Request.Form.ContainsKey(p.Name) ? p : null)
             .FirstOrDefault();

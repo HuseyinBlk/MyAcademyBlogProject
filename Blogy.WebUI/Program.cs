@@ -3,31 +3,24 @@ using Blogy.DataAccess.Extensions;
 using Blogy.Entity.Entities;
 using Blogy.WebUI.Filters;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddDataAccessServices(builder.Configuration);
-builder.Services.AddBusinessServices();
+builder.Services.AddBusinessServices(builder.Configuration);
 
 builder.Services.AddControllersWithViews(opt =>
 {
     opt.Filters.Add<ValidationExceptionFilter>();
 });
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = "/Login";
-
-});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
     app.UseHsts();
 }
 
@@ -45,8 +38,22 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
+        pattern: "{controller=Default}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    var users = await userManager.Users.ToListAsync();
+
+    const string defaultPassword = "Password12*";
+
+    foreach (var user in users)
+    {
+        user.PasswordHash = userManager.PasswordHasher.HashPassword(user, defaultPassword);
+        await userManager.UpdateSecurityStampAsync(user);
+        await userManager.UpdateAsync(user);
+    }
+}
 
 app.Run();

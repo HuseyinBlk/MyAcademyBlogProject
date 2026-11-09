@@ -12,5 +12,5 @@ public interface ICategoryService
     Task UpdateAsync(UpdateCategoryDto categoryDto);
     Task DeleteAsync(int id);
     Task<List<ResultCategoryDto>> GetCategoriesWithBlogsAsync();
-    
+
 }

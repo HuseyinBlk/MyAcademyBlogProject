@@ -8,7 +8,7 @@ public class CreateCategoryValidator : AbstractValidator<CreateCategoryDto>
 {
     public int MinLength = 3;
     public int MaxLength = 20;
-    
+
     public CreateCategoryValidator()
     {
         RuleFor(category => category.Name)

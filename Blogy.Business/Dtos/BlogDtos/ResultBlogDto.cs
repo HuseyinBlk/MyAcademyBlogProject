@@ -14,11 +14,11 @@ public class ResultBlogDto : BaseDto
 
     public int CategoryId { get; set; }
     public string? CategoryName { get; set; }
-    
+
     public IList<BlogTag> BlogTags { get; set; }
-    
+
     public IList<Comment> Comments { get; set; }
-    
+
     public int? WriterId { get; set; }
     public AppUser Writer { get; set; }
     public DateTime? CreatedOn { get; set; }

@@ -16,10 +16,10 @@ public class UserMappings : Profile
 
         CreateMap<AppUser, ResultUserDto>()
             .ForMember(
-                dst => dst.FullName, 
+                dst => dst.FullName,
                 opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
             .ReverseMap();
-        
+
         CreateMap<AppUser, EditProfileDto>()
             .ForMember(
                 dst => dst.ImageUrl,

@@ -1,10 +1,6 @@
 using System.Reflection;
+using Blogy.Business.Configurations;
 using Blogy.Business.Mappings;
-using Blogy.Business.Services.BlogServices;
-using Blogy.Business.Services.CategoryServices;
-using Blogy.Business.Services.CommentServices;
-using Blogy.Business.Services.FileServices;
-using Blogy.Business.Services.UserServices;
 using Blogy.Business.Validators.CategoryValidators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -16,9 +12,9 @@ namespace Blogy.Business.Extensions;
 
 public static class ServiceRegistrations
 {
-    public static IServiceCollection AddBusinessServices(this IServiceCollection services)
+    public static IServiceCollection AddBusinessServices(this IServiceCollection services,IConfiguration configuration)
     {
-        
+
         services.Scan(opt =>
         {
             opt.FromAssemblies(Assembly.GetExecutingAssembly())
@@ -27,13 +23,17 @@ public static class ServiceRegistrations
                 .AsImplementedInterfaces()
                 .WithScopedLifetime();
         });
-        
+
+        services.Configure<GeminiOptions>(configuration.GetSection(GeminiOptions.Section));
+        services.Configure<EmailOptions>(configuration.GetSection(EmailOptions.Section));
+        services.Configure<HuggingFaceOptions>(configuration.GetSection(HuggingFaceOptions.Section));
+
         services.AddAutoMapper(typeof(CategoryMappings).Assembly);
         services
             .AddFluentValidationAutoValidation()
             .AddFluentValidationClientsideAdapters()
             .AddValidatorsFromAssembly(typeof(CreateCategoryValidator).Assembly);
-        
+
         return services;
     }
 }

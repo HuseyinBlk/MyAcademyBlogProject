@@ -1,0 +1,84 @@
+@model List<ResultCommentDto>
+
+@{
+    ViewData["Title"] = "Yorumlarım";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Yaptığım Yorumlar</h3>
+            <p class="text-muted small mb-0">Blog yazılarına yazdığınız tüm yorumları buradan takip edebilirsiniz.</p>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th style="width: 250px;">İlgili Blog</th>
+                            <th>Yorumum</th>
+                            <th style="width: 120px;" class="text-center">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model == null || !Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="bi bi-chat-square-text fs-1 d-block mb-2"></i>
+                                    Henüz hiçbir blog yazısına yorum yapmadınız.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            int index = 1;
+                            @foreach (var comment in Model)
+                            {
+                                <tr>
+                                    <td class="text-muted">@(index++)</td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border p-2 text-wrap text-start">
+                                            <i class="bi bi-journal-text me-1 text-primary"></i>
+                                            @(comment.Blog?.Title ?? $"Blog #{comment.BlogId}")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-secondary" style="font-size: 0.95rem;">
+                                            @comment.Content
+                                        </p>
+                                    </td>
+                                    <td class="text-center">
+                                        <form asp-area="User"
+                                              asp-controller="Comment"
+                                              asp-action="Delete"
+                                              asp-route-id="@comment.Id"
+                                              method="post"
+                                              onsubmit="return confirm('Bu yorumu silmek istediğinize emin misiniz?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash3"></i> Sil
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

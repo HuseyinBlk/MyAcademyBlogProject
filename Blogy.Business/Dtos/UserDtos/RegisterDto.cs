@@ -10,7 +10,7 @@ public class RegisterDto
     public string Email { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    
+
     [Compare("Password", ErrorMessage = "Şifreler birbiri ile uyumlu değil.")]
     public string ConfirmPassword { get; set; }
 }
