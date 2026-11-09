@@ -1,0 +1,115 @@
+@model CreateBlogDto
+
+@{
+    ViewData["Title"] = "Yeni Blog Yaz";
+    Layout = "_PanelLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Yeni Blog Yazısı</h3>
+        <p class="text-muted small mb-0">Okuyucularınızla buluşturmak üzere zengin ve etkileyici bir blog içeriği hazırlayın.</p>
+    </div>
+    <a asp-area="Writer" asp-controller="Blog" asp-action="Index" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+        <i class="bi bi-arrow-left"></i> Bloglarıma Dön
+    </a>
+</div>
+
+<form asp-area="Writer" asp-controller="Blog" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-4"></div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square text-primary"></i> İçerik Detayları
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label fw-semibold text-dark">Blog Başlığı <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-type-h1"></i></span>
+                            <input type="text" asp-for="Title" class="form-control border-start-0 ps-0" placeholder="Örn: 2026'da ASP.NET Core Mimarisi..." required autofocus />
+                        </div>
+                        <span class="text-danger small" asp-validation-for="Title"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold text-dark">Blog İçeriği <span class="text-danger">*</span></label>
+                        <textarea asp-for="Description" class="form-control" rows="12" placeholder="Yazınızın detaylarını buraya dökün..." required></textarea>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="form-text text-muted small">Okuyucuları etkileyecek akıcı ve bilgilendirici bir içerik hazırlayın.</span>
+                            <span class="text-danger small" asp-validation-for="Description"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-tag text-primary"></i> Kategori
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <label asp-for="CategoryId" class="form-label fw-semibold small text-secondary">Yazının Kategorisi <span class="text-danger">*</span></label>
+                    <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-select" required>
+                        <option value="" disabled selected>-- Kategori Seçiniz --</option>
+                    </select>
+                    <span class="text-danger small" asp-validation-for="CategoryId"></span>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-tags text-primary"></i> Etiketler (Tags)
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <label asp-for="Tags" class="form-label fw-semibold small text-secondary">Yazı Etiketleri</label>
+                    <input type="text" asp-for="Tags" class="form-control" placeholder="Örn: csharp, dotnet, yapay-zeka" />
+                    <div class="form-text text-muted" style="font-size: 0.75rem;">
+                        Etiketleri virgülle (,) ayırarak yazınız.
+                    </div>
+                    <span class="text-danger small" asp-validation-for="Tags"></span>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="card-title mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-image text-primary"></i> Kapak Görseli
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <div class="mb-2">
+                        <label class="form-label fw-semibold small text-secondary">
+                            Kapak Görseli Seçin <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" name="coverImageFile" class="form-control form-control-sm" accept="image/*" required />
+                        <div class="form-text text-muted" style="font-size: 0.75rem;">Yatay ve yüksek kaliteli bir kapak görseli seçin.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3 bg-light">
+                <div class="card-body p-3 text-center">
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-2">
+                        <i class="bi bi-send-fill"></i> Blogu Yayınla
+                    </button>
+                    <a asp-area="Writer" asp-controller="Blog" asp-action="Index" class="btn btn-link text-secondary text-decoration-none small">
+                        Değişiklikleri iptal et
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

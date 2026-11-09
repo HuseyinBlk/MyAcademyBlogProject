@@ -1,0 +1,13 @@
+@model List<ResultTagDto>
+
+<div class="sidebar-box">
+    <h3 class="heading">Etiketler</h3>
+    <ul class="tags">
+        @foreach (var tag in Model)
+        {
+            <li>
+                <a asp-controller="Blog" asp-action="GetBlogsByTag" asp-route-id="@tag.Id">#@tag.Name</a>
+            </li>
+        }
+    </ul>
+</div>

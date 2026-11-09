@@ -2,11 +2,11 @@
 
 @{
     ViewData["Title"] = "Profilimi Düzenle";
-    Layout = "_Layout";
+    Layout = "_PanelLayout";
 }
 
 <div class="row">
-    <!-- SOL KOLON: Profil Kartı / Önizleme -->
+
     <div class="col-lg-4 col-md-5 mb-4">
         <div class="card shadow-sm border-0 text-center p-4">
             <div class="position-relative d-inline-block mx-auto mb-3">
@@ -42,7 +42,6 @@
         </div>
     </div>
 
-    <!-- SAĞ KOLON: Profil Düzenleme Formu -->
     <div class="col-lg-8 col-md-7">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white py-3 border-bottom">
@@ -50,14 +49,12 @@
             </div>
 
             <div class="card-body p-4">
-                <!-- Dosya yükleme olduğu için enctype="multipart/form-data" ZORUNLUDUR -->
+
                 <form method="post" asp-area="Admin" asp-controller="Profile" asp-action="SaveProfile" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                    <!-- Mevcut görsel yolunu saklayan gizli input -->
                     <input type="hidden" asp-for="ImageUrl" />
 
-                    <!-- BÖLÜM 1: Kişisel Bilgiler -->
                     <h6 class="fw-bold text-primary mb-3">
                         <i class="bi bi-person-lines-fill me-1"></i> Kişisel Bilgiler
                     </h6>
@@ -108,7 +105,6 @@
 
                     <hr class="my-4 text-muted" />
 
-                    <!-- BÖLÜM 2: Güvenlik / Şifre Değiştirme -->
                     <h6 class="fw-bold text-primary mb-3">
                         <i class="bi bi-shield-lock me-1"></i> Şifre Değiştir (İsteğe Bağlı)
                     </h6>
@@ -134,7 +130,6 @@
                         </div>
                     </div>
 
-                    <!-- Kaydet Butonu -->
                     <div class="d-flex justify-content-end gap-2">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
                             <i class="bi bi-check2-circle me-1"></i> Değişiklikleri Kaydet

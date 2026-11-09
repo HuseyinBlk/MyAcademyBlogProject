@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Blogy Panel</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+        .sidebar {
+            min-height: 100vh;
+            width: 260px;
+            background: #1e293b;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .sidebar .nav-link {
+            color: #94a3b8;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 8px;
+            margin: 4px 12px;
+            transition: all 0.2s;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #fff;
+            background-color: #334155;
+        }
+        .sidebar .nav-link i {
+            font-size: 1.15rem;
+        }
+        .sidebar .nav-header {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            padding: 8px 16px 4px 16px;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 24px 32px;
+        }
+        .topbar {
+            background: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar d-flex flex-column justify-content-between p-3">
+        <div>
+
+            <div class="px-3 py-2 mb-3 border-bottom border-secondary pb-3">
+                <a href="/" class="text-white text-decoration-none d-flex align-items-center gap-2">
+                    <i class="bi bi-bootstrap-fill fs-3 text-primary"></i>
+                    <span class="fs-5 fw-bold">Blogy Panel</span>
+                </a>
+            </div>
+
+            <ul class="nav flex-column">
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item text-uppercase nav-header mt-2 mb-1">Yönetim</li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Blog" asp-action="Index">
+                            <i class="bi bi-journal-richtext"></i> Blog Yönetimi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="AiArticle" asp-action="Index">
+                            <i class="bi bi-cpu"></i> AI Makale Stüdyosu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                            <i class="bi bi-tags"></i> Kategoriler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Comment" asp-action="Index">
+                            <i class="bi bi-chat-left-dots"></i> Yorumlar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Users" asp-action="Index">
+                            <i class="bi bi-people"></i> Kullanıcılar & Roller
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Social" asp-action="Index">
+                            <i class="bi bi-share"></i> Sosyal Medya
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="About" asp-action="Index">
+                            <i class="bi bi-info-circle"></i> Hakkımızda
+                        </a>
+                    </li>
+                }
+
+                @if (User.IsInRole("Writer"))
+                {
+                    <li class="nav-item text-uppercase nav-header mt-2 mb-1">Yazar İşlemleri</li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Writer" asp-controller="Blog" asp-action="Index">
+                            <i class="bi bi-pen"></i> Bloglarım
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Writer" asp-controller="Blog" asp-action="Create">
+                            <i class="bi bi-plus-circle"></i> Yeni Blog Yaz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Writer" asp-controller="AiArticle" asp-action="Index">
+                            <i class="bi bi-cpu"></i> AI Makale Stüdyosu
+                        </a>
+                    </li>
+                }
+
+                @if (User.IsInRole("User") && !User.IsInRole("Admin") && !User.IsInRole("Writer"))
+                {
+                    <li class="nav-item text-uppercase nav-header mt-2 mb-1">Hesabım</li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="User" asp-controller="Comment" asp-action="Index">
+                            <i class="bi bi-chat-square-quote"></i> Yorumlarım
+                        </a>
+                    </li>
+                }
+
+                <li class="nav-item text-uppercase nav-header mt-3 mb-1">Ayarlar</li>
+                <li class="nav-item">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="nav-link" asp-area="Admin" asp-controller="Profile" asp-action="Index">
+                            <i class="bi bi-person-gear"></i> Profilim
+                        </a>
+                    }
+                    else if (User.IsInRole("Writer"))
+                    {
+                        <a class="nav-link" asp-area="Writer" asp-controller="Profile" asp-action="Index">
+                            <i class="bi bi-person-gear"></i> Profilim
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="nav-link" asp-area="User" asp-controller="Profile" asp-action="Index">
+                            <i class="bi bi-person-gear"></i> Profilim
+                        </a>
+                    }
+                </li>
+            </ul>
+        </div>
+
+        <div class="border-top border-secondary pt-3">
+            <a href="/" class="nav-link text-light mb-1">
+                <i class="bi bi-arrow-left-circle"></i> Siteye Dön
+            </a>
+            <a asp-area="" asp-controller="Login" asp-action="Logout" class="nav-link text-danger">
+                <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="topbar d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-secondary">@ViewData["Title"]</h5>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-primary px-3 py-2">
+                    <i class="bi bi-person-badge me-1"></i> @User.Identity?.Name
+                </span>
+            </div>
+        </div>
+
+        @RenderBody()
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

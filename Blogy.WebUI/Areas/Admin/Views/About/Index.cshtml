@@ -1,0 +1,153 @@
+@model ResultAboutDto
+
+@{
+    ViewData["Title"] = "Hakkımızda & AI Tanıtım Yönetimi";
+    Layout = "~/Views/Shared/_PanelLayout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title mb-0"><i class="bi bi-info-circle me-2"></i>Sitede Yayında Olan Metin</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">Bu metin şu anda web sitenizin <strong>Hakkımızda</strong> sayfasında ve sitenin altındaki <strong>Footer</strong> alanında ziyaretçilere gösterilmektedir.</p>
+
+                    <div class="p-3 bg-light rounded border mb-3">
+                        <label class="fw-bold text-secondary mb-2 small text-uppercase">Mevcut Tanıtım Metni:</label>
+                        <p id="currentSummaryText" class="mb-0 text-dark fst-italic" style="line-height: 1.7;">
+                            @(Model?.Description1 ?? "Henüz bir tanıtım metni yayınlanmamış.")
+                        </p>
+                    </div>
+
+                    <div class="alert alert-info py-2 px-3 small mb-0">
+                        <i class="bi bi-lightbulb me-1"></i> Ziyaretçileriniz bu metni doğrudan veritabanından <strong>0 milisaniyede</strong> okur. Yapay zeka sadece siz yeni metin istediğinizde çalışır.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0"><i class="bi bi-robot me-2 text-warning"></i>Gemini AI Tanıtım Asistanı</h5>
+                    <span class="badge bg-warning text-dark">Gemini 3.5 Flash</span>
+                </div>
+                <div class="card-body p-4">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Yapay Zekaya Ek Talimat / İnce Ayar (Opsiyonel):</label>
+                        <div class="input-group">
+                            <input type="text" id="customPromptInput" class="form-control" placeholder="Örn: Daha samimi ve genç bir dille yaz, yazılım ve yapay zeka vurgusunu artır..." />
+                            <button class="btn btn-primary px-4" type="button" id="btnGenerate">
+                                <span id="generateSpinner" class="spinner-border spinner-border-sm me-1 d-none" role="status"></span>
+                                <i class="bi bi-stars me-1" id="generateIcon"></i> Metin Üret
+                            </button>
+                        </div>
+                        <small class="text-muted">Boş bırakırsanız varsayılan kurumsal Blogy tanıtımını üretir.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Yapay Zekanın Ürettiği Taslak (Düzenlenebilir):</label>
+                        <textarea id="aiSummaryResult" class="form-control" rows="5" placeholder="Metin üret butonuna bastığınızda yapay zekanın yazdığı içerik buraya gelecek. İsterseniz üzerinde elle değişiklik yapabilirsiniz..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-outline-secondary btn-sm" type="button" id="btnReset">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Temizle
+                        </button>
+                        <button class="btn btn-success px-4 py-2 fw-bold" type="button" id="btnSave">
+                            <i class="bi bi-cloud-check me-1"></i> Bu Metni Kaydet ve Sitede Yayınla
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            const aboutId = @(Model?.Id ?? 1);
+
+            // 1. AI ile Metin Üretme (AJAX)
+            $("#btnGenerate").click(function () {
+                const customPrompt = $("#customPromptInput").val();
+
+                $("#btnGenerate").prop("disabled", true);
+                $("#generateSpinner").removeClass("d-none");
+                $("#generateIcon").addClass("d-none");
+
+                $.ajax({
+                    url: '/Admin/About/GenerateAiSummary',
+                    type: 'POST',
+                    data: { customPrompt: customPrompt },
+                    success: function (response) {
+                        if (response.success) {
+                            $("#aiSummaryResult").val(response.summary);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Metin Üretildi!',
+                                text: 'Yapay zeka metni hazırladı. Beğenmediyseniz ek talimat yazıp tekrar üretebilir veya elinizle düzenleyebilirsiniz.',
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata!', 'Yapay zeka yanıt üretirken bir sorun oluştu.', 'error');
+                    },
+                    complete: function () {
+                        $("#btnGenerate").prop("disabled", false);
+                        $("#generateSpinner").addClass("d-none");
+                        $("#generateIcon").removeClass("d-none");
+                    }
+                });
+            });
+
+            // 2. Metni Kaydetme ve Yayınlama (AJAX)
+            $("#btnSave").click(function () {
+                const summary = $("#aiSummaryResult").val();
+
+                if (!summary || summary.trim() === '') {
+                    Swal.fire('Uyarı', 'Lütfen önce bir metin üretin veya kutucuğu doldurun.', 'warning');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/Admin/About/SaveSummary',
+                    type: 'POST',
+                    data: { id: aboutId, summary: summary },
+                    success: function (response) {
+                        if (response.success) {
+                            $("#currentSummaryText").text(summary);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Başarılı!',
+                                text: response.message,
+                                confirmButtonText: 'Tamam'
+                            });
+                        } else {
+                            Swal.fire('Hata!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata!', 'Kaydedilirken bir sunucu hatası oluştu.', 'error');
+                    }
+                });
+            });
+
+            // Temizleme
+            $("#btnReset").click(function () {
+                $("#customPromptInput").val('');
+                $("#aiSummaryResult").val('');
+            });
+        });
+    </script>
+}

@@ -24,11 +24,17 @@
       <Folder Include="Areas\Admin\Data\" />
       <Folder Include="Areas\Admin\Models\" />
       <Folder Include="Areas\Admin\Pages\" />
+      <Folder Include="Areas\User\Data\" />
+      <Folder Include="Areas\User\Models\" />
+      <Folder Include="Areas\User\Pages\" />
+      <Folder Include="Areas\Writer\Data\" />
+      <Folder Include="Areas\Writer\Models\" />
       <Folder Include="Pages\Shared\Components\" />
     </ItemGroup>
 
     <ItemGroup>
       <AdditionalFiles Include="Areas\Admin\Views\Blog\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     </ItemGroup>
 
 </Project>

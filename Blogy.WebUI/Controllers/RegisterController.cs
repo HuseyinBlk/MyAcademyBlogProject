@@ -8,7 +8,7 @@ namespace Blogy.WebUI.Controllers;
 
 public class RegisterController(IUserService userService) : Controller
 {
-    // GET
+
     public IActionResult Index()
     {
         return View();
@@ -32,7 +32,7 @@ public class RegisterController(IUserService userService) : Controller
             }
             return View(model);
         }
-        
+
         return RedirectToAction("Index", "Login");
 
     }

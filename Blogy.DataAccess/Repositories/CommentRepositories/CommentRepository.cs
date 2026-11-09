@@ -16,4 +16,5 @@ public class CommentRepository : GenericRepository<Comment>, ICommentRepository
         var comments = await _table.Include(u => u.User).Include(b => b.Blog).ToListAsync();
         return comments;
     }
+    
 }

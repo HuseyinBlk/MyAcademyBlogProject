@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Yeni Rol Ekle";
-    Layout = "_Layout";
+    Layout = "_PanelLayout";
 }
 
 <div class="row justify-content-center">
@@ -14,17 +14,16 @@
 
             <div class="card-body p-4">
                 <form method="post">
-                    <!-- Hata Mesajları Özeti -->
+
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                    <!-- Rol Adı Alanı -->
                     <div class="mb-4">
                         <label asp-for="Name" class="form-label fw-semibold">Rol Adı</label>
-                        <input type="text" 
-                               asp-for="Name" 
-                               class="form-control" 
-                               placeholder="Örn: Admin, Yazar, Editör, Üye" 
-                               required 
+                        <input type="text"
+                               asp-for="Name"
+                               class="form-control"
+                               placeholder="Örn: Admin, Yazar, Editör, Üye"
+                               required
                                autofocus />
                         <span asp-validation-for="Name" class="text-danger small"></span>
                         <div class="form-text text-muted">
@@ -32,15 +31,14 @@
                         </div>
                     </div>
 
-                    <!-- Butonlar -->
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary px-4">
                             Kaydet
                         </button>
-                        
-                        <a asp-area="Admin" 
-                           asp-controller="Role" 
-                           asp-action="Index" 
+
+                        <a asp-area="Admin"
+                           asp-controller="Role"
+                           asp-action="Index"
                            class="btn btn-outline-secondary px-4">
                             Vazgeç
                         </a>

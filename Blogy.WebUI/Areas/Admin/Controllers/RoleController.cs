@@ -11,7 +11,7 @@ namespace Blogy.WebUI.Areas.Admin.Controllers;
 [Area(Roles.Admin)]
 public class RoleController(RoleManager<AppRole> roleManager) : Controller
 {
-    // GET
+
     public async Task<IActionResult> Index()
     {
         var roles = await roleManager.Roles.ToListAsync();
@@ -27,7 +27,7 @@ public class RoleController(RoleManager<AppRole> roleManager) : Controller
     public async Task<IActionResult> Create(AppRole role)
     {
         var result = await roleManager.CreateAsync(role);
-        
+
         if(!result.Succeeded)
         {
             foreach (var error in result.Errors)
@@ -49,12 +49,12 @@ public class RoleController(RoleManager<AppRole> roleManager) : Controller
     public async Task<IActionResult> Edit(AppRole role)
     {
         var existingRole = await roleManager.FindByIdAsync(role.Id.ToString());
-        
+
         if (existingRole == null)
         {
             return NotFound();
         }
-        
+
         existingRole.Name = role.Name;
         await roleManager.UpdateAsync(existingRole);
         return RedirectToAction("Index");
@@ -69,9 +69,9 @@ public class RoleController(RoleManager<AppRole> roleManager) : Controller
         {
             return RedirectToAction("Index");
         }
-        
+
         await roleManager.DeleteAsync(role);
         return RedirectToAction("Index");
-        
+
     }
 }

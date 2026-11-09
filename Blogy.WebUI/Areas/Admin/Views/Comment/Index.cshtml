@@ -1,35 +1,44 @@
 @model List<ResultCommentDto>
 
 @{
-    ViewData["Title"] = "Yorumlar";
-    Layout = "_Layout";
+    ViewData["Title"] = "Yorum Yönetimi";
+    Layout = "_PanelLayout";
 }
 
-<!-- Üst Başlık Bilgisi ve Yeni Yorum Ekle Butonu -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="mb-1 fw-bold">Yorum Listesi</h2>
-        <p class="text-muted small mb-0">Blog yazılarına gelen tüm kullanıcı yorumlarını buradan yönetebilirsiniz.</p>
+        <h3 class="fw-bold mb-1">Yorum Yönetimi</h3>
+        <p class="text-muted small mb-0">Helsinki-NLP, Toxic-BERT ve Google Gemini AI modelleriyle denetlenen kullanıcı yorumları.</p>
     </div>
-
-    <a asp-area="Admin" asp-controller="Comment" asp-action="Create" class="btn btn-primary d-flex align-items-center gap-2">
-        <i class="bi bi-chat-left-text-fill"></i>
-        <span>Yeni Yorum Ekle</span>
-    </a>
 </div>
 
-<!-- Yorumlar Tablosu -->
-<div class="card shadow-sm border-0">
+<div class="card shadow-sm border-0 rounded-3">
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th style="width: 60px;" class="text-center">#</th>
-                        <th style="width: 220px;">Kullanıcı</th>
-                        <th style="width: 220px;">İlgili Blog</th>
-                        <th>Yorum İçeriği</th>
-                        <th style="width: 130px;" class="text-center">İşlemler</th>
+                        <th style="width: 50px;" class="text-center">#</th>
+                        <th>Kullanıcı</th>
+                        <th>İlgili Blog</th>
+                        <th>Yorum & Çeviri</th>
+                        <th class="text-center" style="width: 170px;">Toksiklik Analizi</th>
+                        <th class="text-center" style="width: 250px;">İşlemler / Tekrar Analiz</th>
                     </tr>
                 </thead>
 
@@ -37,7 +46,7 @@
                     @if (Model == null || !Model.Any())
                     {
                         <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
+                            <td colspan="6" class="text-center py-5 text-muted">
                                 <i class="bi bi-chat-square-dots fs-1 d-block mb-2 text-secondary"></i>
                                 Henüz hiçbir blog yazısına yorum yapılmamış.
                             </td>
@@ -48,18 +57,20 @@
                         @for (var index = 0; index < Model.Count; index++)
                         {
                             var comment = Model[index];
+                            var isUnanalyzed = comment.ToxicityScore < 0 || (comment.ToxicityScore == 0 && (string.IsNullOrEmpty(comment.TranslatedText) || comment.TranslatedText == comment.Content));
+                            var percent = Math.Round(comment.ToxicityScore * 100, 1);
+                            var cleanPercent = Math.Round((1.0 - comment.ToxicityScore) * 100, 1);
 
                             <tr>
-                                <!-- 1. Sıra Numarası -->
+
                                 <td class="text-center fw-bold text-muted">
                                     @(index + 1)
                                 </td>
 
-                                <!-- 2. Yorum Yapan Kullanıcı -->
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center overflow-hidden"
-                                             style="width: 38px; height: 38px; min-width: 38px;">
+                                             style="width: 36px; height: 36px; min-width: 36px;">
                                             @if (!string.IsNullOrEmpty(comment.User?.ProfilImageUrl))
                                             {
                                                 <img src="@comment.User.ProfilImageUrl" alt="@comment.User.FullName" class="w-100 h-100 object-fit-cover" />
@@ -71,7 +82,7 @@
                                         </div>
                                         <div>
                                             <div class="fw-semibold text-dark small">
-                                                @(comment.User?.FullName ?? "Anonim Kullanıcı")
+                                                @(comment.User?.FullName ?? "Anonim")
                                             </div>
                                             <span class="text-muted" style="font-size: 0.75rem;">
                                                 @@@(comment.User?.UserName ?? "kullanici")
@@ -80,36 +91,88 @@
                                     </div>
                                 </td>
 
-                                <!-- 3. İlgili Blog Başlığı -->
                                 <td>
-                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 text-wrap text-start"
-                                          style="max-width: 200px; display: inline-block;">
-                                        <i class="bi bi-journal-text me-1"></i>
+                                    <span class="badge bg-light text-dark border px-2 py-1 text-wrap text-start"
+                                          style="max-width: 180px; display: inline-block;">
                                         @(comment.Blog?.Title ?? $"Blog #{comment.BlogId}")
                                     </span>
                                 </td>
 
-                                <!-- 4. Yorum Metni -->
                                 <td>
-                                    <p class="mb-0 text-secondary text-break" style="font-size: 0.9rem;">
+                                    <p class="mb-1 text-dark fw-medium" style="font-size: 0.9rem;">
                                         @comment.Content
                                     </p>
+                                    @if (!string.IsNullOrEmpty(comment.TranslatedText) && comment.TranslatedText != comment.Content)
+                                    {
+                                        <div class="small text-muted fst-italic">
+                                            <i class="bi bi-translate text-primary me-1"></i>EN: "@comment.TranslatedText"
+                                        </div>
+                                    }
+                                    else if (isUnanalyzed)
+                                    {
+                                        <div class="small text-warning fst-italic">
+                                            <i class="bi bi-exclamation-circle me-1"></i>Çeviri yapılamadı
+                                        </div>
+                                    }
                                 </td>
 
-                                <!-- 5. İşlemler -->
                                 <td class="text-center">
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <!-- Sil Butonu -->
-                                        <form asp-area="Admin"
-                                              asp-controller="Comment"
-                                              asp-action="Delete"
-                                              asp-route-id="@comment.Id"
-                                              method="post"
-                                              class="d-inline"
-                                              onsubmit="return confirm('Bu yorumu silmek istediğinize emin misiniz?');">
-                                            
+                                    @if (isUnanalyzed)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning px-2 py-1">
+                                            <i class="bi bi-question-circle-fill me-1"></i> Analiz Edilemedi
+                                        </span>
+                                        <div class="small text-muted fw-semibold mt-1" style="font-size: 0.7rem;">Tekrar Analiz Gerekli</div>
+                                    }
+                                    else if (comment.IsToxic)
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger border border-danger px-2 py-1">
+                                            <i class="bi bi-exclamation-triangle-fill me-1"></i> % @percent Toksik
+                                        </span>
+                                        <div class="small text-danger fw-semibold mt-1" style="font-size: 0.7rem;">Sitede Gizli</div>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success px-2 py-1">
+                                            <i class="bi bi-shield-check me-1"></i> % @cleanPercent Temiz
+                                        </span>
+                                        <div class="small text-success fw-semibold mt-1" style="font-size: 0.7rem;">Yayında</div>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center gap-1 flex-wrap">
+
+                                        <form asp-area="Admin" asp-controller="Comment" asp-action="ReanalyzeWithGemini" asp-route-id="@comment.Id" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-info" title="Google Gemini ile Analiz Et (Ücretsiz & Anlık)">
+                                                <i class="bi bi-stars"></i> Gemini
+                                            </button>
+                                        </form>
+
+                                        <form asp-area="Admin" asp-controller="Comment" asp-action="ReanalyzeWithHuggingFace" asp-route-id="@comment.Id" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary" title="Hugging Face (Helsinki + ToxicBERT) ile Analiz Et">
+                                                <i class="bi bi-robot"></i> HF
+                                            </button>
+                                        </form>
+
+                                        <form asp-area="Admin" asp-controller="Comment" asp-action="ToggleStatus" asp-route-id="@comment.Id" method="post" class="d-inline">
+                                            @if (comment.IsToxic)
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-outline-success" title="Toksik Olmadığını Onayla ve Yayına Al">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-outline-warning" title="Gizle / Toksik Olarak İşaretle">
+                                                    <i class="bi bi-eye-slash"></i>
+                                                </button>
+                                            }
+                                        </form>
+
+                                        <form asp-area="Admin" asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" method="post" class="d-inline" onsubmit="return confirm('Bu yorumu silmek istediğinize emin misiniz?');">
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Yorumu Sil">
-                                                <i class="bi bi-trash3"></i> Sil
+                                                <i class="bi bi-trash3"></i>
                                             </button>
                                         </form>
                                     </div>

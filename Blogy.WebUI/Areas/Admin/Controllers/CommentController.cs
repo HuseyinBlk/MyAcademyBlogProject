@@ -24,8 +24,7 @@ public class CommentController(ICommentService commentService, IBlogService blog
                     Value = blog.Id.ToString()
                 });
     }
-    
-    // GET
+
     public async Task<IActionResult> Index()
     {
         var comments = await commentService.GetCommentsWithBlogAndUserAsync();
@@ -67,6 +66,42 @@ public class CommentController(ICommentService commentService, IBlogService blog
         await commentService.DeleteAsync(id);
         return RedirectToAction("Index");
     }
-    
-    
+
+    [HttpPost]
+    public async Task<IActionResult> ToggleStatus(int id)
+    {
+        await commentService.ToggleCommentStatusAsync(id);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ReanalyzeWithHuggingFace(int id)
+    {
+        var success = await commentService.ReanalyzeWithHuggingFaceAsync(id);
+        if (success)
+        {
+            TempData["SuccessMessage"] = "Yorum Hugging Face modelleriyle başarıyla analiz edildi!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Hugging Face servisi yanıt vermedi (Yetki/Ödeme gerekiyor).";
+        }
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ReanalyzeWithGemini(int id)
+    {
+        var success = await commentService.ReanalyzeWithGeminiAsync(id);
+        if (success)
+        {
+            TempData["SuccessMessage"] = "Yorum Google Gemini AI ile başarıyla analiz edildi!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Gemini servisi ile analiz yapılırken bir hata oluştu.";
+        }
+        return RedirectToAction("Index");
+    }
+
 }

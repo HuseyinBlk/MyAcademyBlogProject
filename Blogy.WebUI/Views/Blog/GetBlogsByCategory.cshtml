@@ -1,8 +1,16 @@
-@model List<ResultBlogDto>
+@using PagedList.Core.Mvc
+@model PagedList.Core.PagedList<ResultBlogDto>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "/Views/UiLayout/Layout.cshtml";
+	ViewBag.Title = ViewBag.categoryName + " Blogları";
+	Layout = "/Views/UiLayout/Layout.cshtml";
+	var pagerOptions = new PagedListRenderOptions
+	{
+		DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+		DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+		LinkToPreviousPageFormat = "‹",
+		LinkToNextPageFormat = "›"
+	};
 }
 
 	<div class="section search-result-wrap">
@@ -24,7 +32,7 @@
 
 						<div class="blog-entry d-flex blog-entry-search-item">
 							<a asp-controller="Blog"
-							   asp-action="Detail"
+							   asp-action="Details"
 							   asp-route-id="@item.Id"
 							   class="img-link me-4 flex-shrink-0 overflow-hidden rounded"
 							   style="width: 220px; height: 150px;">
@@ -35,9 +43,9 @@
 							</a>
 							<div>
 								<span class="date">@item.CreatedOn &bullet; <a href="#">@ViewBag.categoryName</a></span>
-								<h2><a href="single.html">@item.Title</a></h2>
+								<h2><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h2>
 								<p>@summary</p>
-								<p><a href="single.html" class="btn btn-sm btn-outline-primary">Oku</a></p>
+								<p><a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Oku</a></p>
 							</div>
 						</div>
 					}
@@ -45,12 +53,12 @@
 					<div class="row text-start pt-5 border-top">
 						<div class="col-md-12">
 							<div class="custom-pagination">
-								<span>1</span>
-								<a href="#">2</a>
-								<a href="#">3</a>
-								<a href="#">4</a>
-								<span>...</span>
-								<a href="#">15</a>
+								<pager list="@Model"
+								       asp-controller="Blog"
+								       asp-action="GetBlogsByCategory"
+								       asp-route-id="@ViewBag.categoryId"
+								       param-page-number="pageNumber"
+								       options="@pagerOptions" />
 							</div>
 						</div>
 					</div>
@@ -58,46 +66,19 @@
 				</div>
 
 				<div class="col-lg-4 sidebar">
-					
+
 					<div class="sidebar-box search-form-wrap mb-4">
-						<form action="#" class="sidebar-search-form">
+						<form asp-controller="Blog" asp-action="Index" method="get" class="sidebar-search-form">
 							<span class="bi-search"></span>
-							<input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
+							<input type="text" name="search" class="form-control" id="s" placeholder="Blog ara ve Enter'a bas...">
 						</form>
 					</div>
-					<!-- END sidebar-box -->
+
 					@await Component.InvokeAsync("BlogsByCategoryLatestBlogsComponent")
-					<!-- END sidebar-box -->
 
-					<div class="sidebar-box">
-						<h3 class="heading">Categories</h3>
-						<ul class="categories">
-							<li><a href="#">Food <span>(12)</span></a></li>
-							<li><a href="#">Travel <span>(22)</span></a></li>
-							<li><a href="#">Lifestyle <span>(37)</span></a></li>
-							<li><a href="#">Business <span>(42)</span></a></li>
-							<li><a href="#">Adventure <span>(14)</span></a></li>
-						</ul>
-					</div>
-					<!-- END sidebar-box -->
+					@await Component.InvokeAsync("CategoryListComponent")
 
-					<div class="sidebar-box">
-						<h3 class="heading">Tags</h3>
-						<ul class="tags">
-							<li><a href="#">Travel</a></li>
-							<li><a href="#">Adventure</a></li>
-							<li><a href="#">Food</a></li>
-							<li><a href="#">Lifestyle</a></li>
-							<li><a href="#">Business</a></li>
-							<li><a href="#">Freelancing</a></li>
-							<li><a href="#">Travel</a></li>
-							<li><a href="#">Adventure</a></li>
-							<li><a href="#">Food</a></li>
-							<li><a href="#">Lifestyle</a></li>
-							<li><a href="#">Business</a></li>
-							<li><a href="#">Freelancing</a></li>
-						</ul>
-					</div>
+					@await Component.InvokeAsync("TagListComponent")
 
 				</div>
 			</div>

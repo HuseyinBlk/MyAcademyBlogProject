@@ -4,7 +4,7 @@ namespace Blogy.WebUI.Controllers;
 
 public class UiLayoutController : Controller
 {
-    // GET
+
     public IActionResult Layout()
     {
         return View();

@@ -12,5 +12,7 @@ public class Comment : BaseEntity
     public int UserId { get; set; }
     public virtual AppUser User { get; set; }
     
-    
+    public bool IsToxic { get; set; } = false;         
+    public double ToxicityScore { get; set; } = 0.0;    
+    public string? TranslatedText { get; set; }         
 }

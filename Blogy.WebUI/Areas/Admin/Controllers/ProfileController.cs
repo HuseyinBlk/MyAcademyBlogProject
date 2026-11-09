@@ -12,7 +12,7 @@ namespace Blogy.WebUI.Areas.Admin.Controllers;
 [Area(Roles.Admin)]
 public class ProfileController(UserManager<AppUser> userManager, IMapper mapper, IFileService fileService) : Controller
 {
-    // GET
+
     public async Task<IActionResult> Index()
     {
         var user = await userManager.FindByNameAsync(User.Identity.Name);
@@ -28,13 +28,13 @@ public class ProfileController(UserManager<AppUser> userManager, IMapper mapper,
         {
             return NotFound();
         }
-        
+
         mapper.Map(model, user);
 
         if (model.ImageFile != null && model.ImageFile.Length > 0)
         {
             fileService.DeleteFile(user.ProfilImageUrl);
-            
+
             user.ProfilImageUrl = await fileService.UploadFileAsync(model.ImageFile,"images/users/profileImages");
         }
 
@@ -50,7 +50,7 @@ public class ProfileController(UserManager<AppUser> userManager, IMapper mapper,
             {
                 return View("Index", model);
             }
-            
+
             var passwordResult = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             if (!passwordResult.Succeeded)
             {
@@ -61,7 +61,7 @@ public class ProfileController(UserManager<AppUser> userManager, IMapper mapper,
                 return View("Index", model);
             }
         }
-        
+
         var result = await userManager.UpdateAsync(user);
         if (!result.Succeeded)
         {
@@ -71,9 +71,9 @@ public class ProfileController(UserManager<AppUser> userManager, IMapper mapper,
             }
             return View("Index", model);
         }
-        
+
         return RedirectToAction("Index");
-        
+
     }
-    
+
 }

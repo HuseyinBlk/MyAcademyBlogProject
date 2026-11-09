@@ -9,6 +9,6 @@ public class UpdateBlogDto :BaseDto
     public string? CoverImage { get; set; }
     public string? BlogImage { get; set; }
     public string? BlogImage2 { get; set; }
-
     public int CategoryId { get; set; }
+    public string? Tags { get; set; }
 }

@@ -16,7 +16,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _context = context;
         _table = context.Set<TEntity>();
     }
-    
+
     public async Task<List<TEntity>> GetAllAsync()
     {
         return await _table.AsNoTracking().ToListAsync();
@@ -25,7 +25,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter)
     {
         return await _table.AsNoTracking().Where(filter).ToListAsync();
-    } 
+    }
 
     public async Task<TEntity> GetByIdAsync(int id)
     {

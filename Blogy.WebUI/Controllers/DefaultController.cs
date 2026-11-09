@@ -6,10 +6,10 @@ namespace Blogy.WebUI.Controllers;
 
 public class DefaultController : Controller
 {
-    // GET
+
     public async Task<IActionResult> Index()
     {
         return View();
     }
-    
+
 }

@@ -14,5 +14,5 @@ public class CategoryMappings : Profile
         CreateMap<Category, CreateCategoryDto>().ReverseMap();
         CreateMap<Category, UpdateCategoryDto>().ReverseMap();
     }
-    
+
 }

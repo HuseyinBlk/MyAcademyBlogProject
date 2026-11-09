@@ -7,7 +7,7 @@
             @foreach (var item in Model)
             {
                 <li>
-                    <a href="">
+                    <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id">
                         <img src="@item.CoverImage" alt="Image placeholder" class="me-4 rounded">
                         <div class="text">
                             <h4>@item.Title</h4>
@@ -18,7 +18,7 @@
                     </a>
                 </li>
             }
-            
+
         </ul>
     </div>
 </div>
